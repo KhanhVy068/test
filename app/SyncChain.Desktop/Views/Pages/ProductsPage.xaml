@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ContentPage x:Class="SyncChain.Desktop.Views.Pages.ProductsPage"
+             x:Name="RootPage"
+             xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             NavigationPage.HasNavigationBar="False">
+    <ScrollView Background="{StaticResource AppPageBackgroundBrush}">
+        <VerticalStackLayout Padding="30" Spacing="24">
+            <Grid ColumnDefinitions="*,Auto,Auto" ColumnSpacing="12">
+                <VerticalStackLayout>
+                    <Label Text="QUAN LY SAN PHAM" Style="{StaticResource PageTitleLabel}" />
+                    <Label Text="Xem, them, sua va xoa san pham theo quyen admin/manager." Style="{StaticResource CaptionLabel}" FontSize="14" />
+                </VerticalStackLayout>
+                <Button Grid.Column="1" Text="Lam moi" Style="{StaticResource SecondaryButtonStyle}" Clicked="OnRefreshClicked" />
+                <Button x:Name="ShowCreateFormButton"
+                        Grid.Column="2"
+                        Text="+ Them san pham"
+                        Style="{StaticResource PrimaryButtonStyle}"
+                        Clicked="OnShowCreateFormClicked" />
+            </Grid>
+
+            <Grid ColumnDefinitions="*,*,*,*" ColumnSpacing="18">
+                <Border Style="{StaticResource CardBorderStyle}">
+                    <VerticalStackLayout Spacing="10">
+                        <Label Text="TONG SAN PHAM" Style="{StaticResource CaptionLabel}" />
+                        <Label x:Name="TotalProductsLabel" Text="0" FontSize="30" FontAttributes="Bold" />
+                    </VerticalStackLayout>
+                </Border>
+                <Border Grid.Column="1" Style="{StaticResource CardBorderStyle}">
+                    <VerticalStackLayout Spacing="10">
+                        <Label Text="DANG BAN" Style="{StaticResource CaptionLabel}" />
+                        <Label x:Name="ActiveProductsLabel" Text="0" FontSize="30" FontAttributes="Bold" />
+                    </VerticalStackLayout>
+                </Border>
+                <Border Grid.Column="2" Style="{StaticResource CardBorderStyle}">
+                    <VerticalStackLayout Spacing="10">
+                        <Label Text="SAP HET HANG" Style="{StaticResource CaptionLabel}" />
+                        <Label x:Name="LowStockProductsLabel" Text="0" FontSize="30" FontAttributes="Bold" />
+                    </VerticalStackLayout>
+                </Border>
+                <Border Grid.Column="3" Style="{StaticResource CardBorderStyle}">
+                    <VerticalStackLayout Spacing="10">
+                        <Label Text="NGUNG BAN" Style="{StaticResource CaptionLabel}" />
+                        <Label x:Name="OutOfStockProductsLabel" Text="0" FontSize="30" FontAttributes="Bold" />
+                    </VerticalStackLayout>
+                </Border>
+            </Grid>
+
+            <Grid ColumnDefinitions="2*,Auto" ColumnSpacing="12">
+                <Border BackgroundColor="White" Stroke="{StaticResource BorderColor}" StrokeThickness="1" Padding="14,0">
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="12" />
+                    </Border.StrokeShape>
+                    <Grid ColumnDefinitions="Auto,*" ColumnSpacing="10" HeightRequest="42">
+                        <Label Text="Search" VerticalTextAlignment="Center" TextColor="{StaticResource MutedColor}" />
+                        <Entry x:Name="SearchEntry"
+                               Grid.Column="1"
+                               Placeholder="Tim kiem san pham..."
+                               BackgroundColor="Transparent"
+                               TextChanged="OnSearchTextChanged" />
+                    </Grid>
+                </Border>
+                <Label x:Name="PermissionLabel" Grid.Column="1" Text="-" Style="{StaticResource CaptionLabel}" VerticalTextAlignment="Center" />
+            </Grid>
+
+            <FlexLayout Wrap="Wrap" Direction="Row" BindableLayout.ItemsSource="{Binding Products}">
+                <BindableLayout.ItemTemplate>
+                    <DataTemplate>
+                        <Border Style="{StaticResource CardBorderStyle}" Margin="0,0,20,20" WidthRequest="332" Padding="0">
+                            <VerticalStackLayout Spacing="14">
+                                <Grid HeightRequest="150">
+                                    <Border BackgroundColor="#E8EDF4" StrokeThickness="0">
+                                        <Border.StrokeShape>
+                                            <RoundRectangle CornerRadius="22,22,0,0" />
+                                        </Border.StrokeShape>
+                                        <Image Source="{Binding DisplayImageSource}" Aspect="AspectFill" IsVisible="{Binding HasImage}" />
+                                        <Label Text="{Binding Initials}" IsVisible="{Binding ShowInitials}" HorizontalOptions="Center" VerticalOptions="Center" FontSize="48" FontAttributes="Bold" TextColor="{StaticResource PrimaryColor}" />
+                                    </Border>
+                                    <Border BackgroundColor="{Binding BadgeColor}" StrokeThickness="0" HorizontalOptions="End" VerticalOptions="Start" Margin="14" Padding="10,4">
+                                        <Border.StrokeShape>
+                                            <RoundRectangle CornerRadius="999" />
+                                        </Border.StrokeShape>
+                                        <Label Text="{Binding BadgeText}" TextColor="White" FontSize="12" />
+                                    </Border>
+                                </Grid>
+
+                                <VerticalStackLayout Padding="22" Spacing="14">
+                                    <Label Text="{Binding Code}" Style="{StaticResource CaptionLabel}" />
+                                    <Label Text="{Binding Name}" FontAttributes="Bold" FontSize="22" />
+                                    <Label Text="{Binding Description}" Style="{StaticResource CaptionLabel}" FontSize="13" MaxLines="2" />
+
+                                    <Grid ColumnDefinitions="*,*" ColumnSpacing="12">
+                                        <VerticalStackLayout>
+                                            <Label Text="Gia ban" Style="{StaticResource CaptionLabel}" />
+                                            <Label Text="{Binding Price}" FontAttributes="Bold" />
+                                        </VerticalStackLayout>
+                                        <VerticalStackLayout Grid.Column="1">
+                                            <Label Text="Ton kho" Style="{StaticResource CaptionLabel}" />
+                                            <Label Text="{Binding Stock}" FontAttributes="Bold" />
+                                        </VerticalStackLayout>
+                                    </Grid>
+
+                                    <Grid ColumnDefinitions="*,Auto,Auto" ColumnSpacing="8">
+                                        <Button Text="Chi tiet" Style="{StaticResource SecondaryButtonStyle}" Clicked="OnOpenDetailClicked" CommandParameter="{Binding .}" />
+                                        <Button Grid.Column="1"
+                                                Text="Sua"
+                                                Style="{StaticResource SecondaryButtonStyle}"
+                                                Clicked="OnEditProductClicked"
+                                                CommandParameter="{Binding .}"
+                                                IsVisible="{Binding Source={x:Reference RootPage}, Path=CanManageProducts}" />
+                                        <Button Grid.Column="2"
+                                                Text="Xoa"
+                                                Style="{StaticResource SecondaryButtonStyle}"
+                                                Clicked="OnDeleteProductClicked"
+                                                CommandParameter="{Binding .}"
+                                                IsVisible="{Binding Source={x:Reference RootPage}, Path=CanManageProducts}" />
+                                    </Grid>
+                                </VerticalStackLayout>
+                            </VerticalStackLayout>
+                        </Border>
+                    </DataTemplate>
+                </BindableLayout.ItemTemplate>
+            </FlexLayout>
+
+            <Label x:Name="EmptyLabel" Text="Khong co san pham phu hop." Style="{StaticResource CaptionLabel}" HorizontalOptions="Center" IsVisible="False" />
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

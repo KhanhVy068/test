@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Shell
+    x:Class="SyncChain.Desktop.AppShell"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:pages="clr-namespace:SyncChain.Desktop.Views.Pages"
+    FlyoutBackgroundColor="{StaticResource SidebarColor}"
+    FlyoutBehavior="Flyout"
+    Shell.BackgroundColor="{StaticResource SidebarColor}"
+    Shell.ForegroundColor="White"
+    Shell.TitleColor="White"
+    Shell.UnselectedColor="{StaticResource SidebarMutedColor}">
+
+    <Shell.FlyoutHeader>
+        <Grid Padding="22,26,22,18">
+            <VerticalStackLayout Spacing="4">
+                <Label Text="SyncChain" TextColor="White" FontSize="22" FontAttributes="Bold" />
+                <Label x:Name="RoleLabel" Text="ROLE" TextColor="{StaticResource SidebarMutedColor}" FontSize="10" CharacterSpacing="1.8" />
+            </VerticalStackLayout>
+        </Grid>
+    </Shell.FlyoutHeader>
+
+    <FlyoutItem x:Name="DashboardItem" Title="Dashboard" Route="dashboard">
+        <ShellContent ContentTemplate="{DataTemplate pages:DashboardPage}" />
+    </FlyoutItem>
+
+    <FlyoutItem x:Name="ProductsItem" Title="San pham" Route="products">
+        <ShellContent ContentTemplate="{DataTemplate pages:ProductsPage}" />
+    </FlyoutItem>
+
+    <FlyoutItem x:Name="OrdersItem" Title="Don hang" Route="orders">
+        <ShellContent ContentTemplate="{DataTemplate pages:OrdersPage}" />
+    </FlyoutItem>
+
+    <FlyoutItem x:Name="CreateOrderItem" Title="Tao don hang" Route="create-order">
+        <ShellContent ContentTemplate="{DataTemplate pages:CreateOrderPage}" />
+    </FlyoutItem>
+
+    <FlyoutItem x:Name="ImportsItem" Title="Nhap hang" Route="imports">
+        <ShellContent ContentTemplate="{DataTemplate pages:ImportsPage}" />
+    </FlyoutItem>
+
+    <FlyoutItem x:Name="LogsItem" Title="Nhat ky" Route="logs">
+        <ShellContent ContentTemplate="{DataTemplate pages:LogsPage}" />
+    </FlyoutItem>
+
+    <FlyoutItem x:Name="ChatItem" Title="Tin nhan" Route="chat">
+        <ShellContent ContentTemplate="{DataTemplate pages:ChatPage}" />
+    </FlyoutItem>
+
+    <FlyoutItem x:Name="AccessItem" Title="Nguoi dung va phan quyen" Route="access">
+        <ShellContent ContentTemplate="{DataTemplate pages:UserAccessPage}" />
+    </FlyoutItem>
+</Shell>

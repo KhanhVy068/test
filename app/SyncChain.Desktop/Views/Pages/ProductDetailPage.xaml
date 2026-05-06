@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ContentPage x:Class="SyncChain.Desktop.Views.Pages.ProductDetailPage"
+             xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             NavigationPage.HasNavigationBar="False">
+    <ScrollView Background="{StaticResource AppPageBackgroundBrush}">
+        <VerticalStackLayout Padding="24" Spacing="18">
+            <Grid ColumnDefinitions="Auto,*,Auto,Auto" ColumnSpacing="12">
+                <Button Text="Quay lai san pham" Style="{StaticResource SecondaryButtonStyle}" Clicked="OnBackClicked" />
+                <Label Grid.Column="1" />
+                <Button x:Name="ImportButton"
+                        Grid.Column="2"
+                        Text="Nhap hang"
+                        Style="{StaticResource SecondaryButtonStyle}"
+                        Clicked="OnImportClicked"
+                        IsVisible="False" />
+                <Button x:Name="EditToggleButton"
+                        Grid.Column="3"
+                        Text="Chinh sua"
+                        Style="{StaticResource PrimaryButtonStyle}"
+                        Clicked="OnToggleEditClicked"
+                        IsVisible="False" />
+            </Grid>
+
+            <Grid ColumnDefinitions="0.85*,1.15*" ColumnSpacing="18">
+                <Border Style="{StaticResource CardBorderStyle}">
+                    <VerticalStackLayout Spacing="12">
+                        <Grid HeightRequest="320">
+                            <Border BackgroundColor="#E5E7EB" StrokeThickness="0">
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="16" />
+                                </Border.StrokeShape>
+                                <Image x:Name="ProductImage" Aspect="AspectFill" />
+                                <Label x:Name="InitialsLabel"
+                                       HorizontalOptions="Center"
+                                       VerticalOptions="Center"
+                                       FontSize="72"
+                                       FontAttributes="Bold"
+                                       TextColor="{StaticResource PrimaryColor}" />
+                            </Border>
+                            <Border x:Name="ImageBadge" BackgroundColor="{StaticResource WarningColor}" StrokeThickness="0" Padding="12,6" HorizontalOptions="End" VerticalOptions="Start" Margin="14">
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="999" />
+                                </Border.StrokeShape>
+                                <Label x:Name="ImageBadgeLabel" Text="-" TextColor="White" FontSize="12" FontAttributes="Bold" />
+                            </Border>
+                        </Grid>
+                    </VerticalStackLayout>
+                </Border>
+
+                <Border Grid.Column="1" Style="{StaticResource CardBorderStyle}">
+                    <VerticalStackLayout Spacing="18">
+                        <Label x:Name="CodeLabel" Text="SP-0000" Style="{StaticResource CaptionLabel}" FontAttributes="Bold" />
+                        <Label x:Name="NameLabel" Text="Ten san pham" Style="{StaticResource PageTitleLabel}" />
+                        <Label x:Name="DescriptionLabel" Text="Mo ta san pham" Style="{StaticResource CaptionLabel}" FontSize="14" />
+
+                        <Grid ColumnDefinitions="*,*" ColumnSpacing="12">
+                            <Border BackgroundColor="#F4F6F8" StrokeThickness="0" Padding="18">
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="12" />
+                                </Border.StrokeShape>
+                                <VerticalStackLayout Spacing="6">
+                                    <Label Text="Gia ban" Style="{StaticResource CaptionLabel}" FontSize="12" />
+                                    <Label x:Name="PriceLabel" Text="0 VND" FontSize="22" FontAttributes="Bold" TextColor="{StaticResource PrimaryColor}" />
+                                </VerticalStackLayout>
+                            </Border>
+                            <Border Grid.Column="1" BackgroundColor="#F4F6F8" StrokeThickness="0" Padding="18">
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="12" />
+                                </Border.StrokeShape>
+                                <VerticalStackLayout Spacing="6">
+                                    <Label Text="Gia nhap" Style="{StaticResource CaptionLabel}" FontSize="12" />
+                                    <Label x:Name="ImportPriceLabel" Text="0 VND" FontSize="22" FontAttributes="Bold" TextColor="{StaticResource PrimaryColor}" />
+                                </VerticalStackLayout>
+                            </Border>
+                        </Grid>
+
+                        <Grid ColumnDefinitions="*,*,*" ColumnSpacing="12">
+                            <Border BackgroundColor="#F4F6F8" StrokeThickness="0" Padding="16">
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="12" />
+                                </Border.StrokeShape>
+                                <VerticalStackLayout Spacing="5">
+                                    <Label Text="Ton kho hien tai" Style="{StaticResource CaptionLabel}" FontSize="11" HorizontalTextAlignment="Center" />
+                                    <Label x:Name="StockLabel" Text="0" FontSize="22" FontAttributes="Bold" HorizontalTextAlignment="Center" />
+                                </VerticalStackLayout>
+                            </Border>
+                            <Border Grid.Column="1" BackgroundColor="#F4F6F8" StrokeThickness="0" Padding="16">
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="12" />
+                                </Border.StrokeShape>
+                                <VerticalStackLayout Spacing="5">
+                                    <Label Text="Canh bao ton kho" Style="{StaticResource CaptionLabel}" FontSize="11" HorizontalTextAlignment="Center" />
+                                    <Label x:Name="LowStockLabel" Text="10" FontSize="22" FontAttributes="Bold" HorizontalTextAlignment="Center" />
+                                </VerticalStackLayout>
+                            </Border>
+                            <Border Grid.Column="2" BackgroundColor="#F4F6F8" StrokeThickness="0" Padding="16">
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="12" />
+                                </Border.StrokeShape>
+                                <VerticalStackLayout Spacing="5">
+                                    <Label Text="Da ban" Style="{StaticResource CaptionLabel}" FontSize="11" HorizontalTextAlignment="Center" />
+                                    <Label x:Name="SoldLabel" Text="0" FontSize="22" FontAttributes="Bold" HorizontalTextAlignment="Center" />
+                                </VerticalStackLayout>
+                            </Border>
+                        </Grid>
+
+                        <BoxView HeightRequest="1" Color="{StaticResource BorderColor}" />
+
+                        <Grid ColumnDefinitions="*,Auto">
+                            <Label Text="Trang thai" Style="{StaticResource CaptionLabel}" VerticalTextAlignment="Center" />
+                            <Border x:Name="StatusBadge" Grid.Column="1" StrokeThickness="0" Padding="12,6">
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="999" />
+                                </Border.StrokeShape>
+                                <Label x:Name="StatusLabel" Text="-" FontSize="12" FontAttributes="Bold" />
+                            </Border>
+                        </Grid>
+
+                        <Grid x:Name="ManageActions" ColumnDefinitions="*,*" ColumnSpacing="12" IsVisible="False">
+                            <Button Text="Nhap them hang" Style="{StaticResource PrimaryButtonStyle}" Clicked="OnImportClicked" />
+                            <Button Grid.Column="1" Text="Ngung ban" Style="{StaticResource SecondaryButtonStyle}" Clicked="OnStopSellingClicked" />
+                        </Grid>
+                    </VerticalStackLayout>
+                </Border>
+            </Grid>
+
+            <Border x:Name="EditForm" Style="{StaticResource CardBorderStyle}" IsVisible="False">
+                <VerticalStackLayout Spacing="12">
+                    <Label Text="Chinh sua san pham" Style="{StaticResource SectionTitleLabel}" />
+                    <Entry x:Name="NameEntry" Placeholder="Ten san pham" />
+                    <Grid ColumnDefinitions="*,*" ColumnSpacing="12">
+                        <Entry x:Name="PriceEntry" Placeholder="Gia ban" Keyboard="Numeric" />
+                        <Entry x:Name="StockEntry" Grid.Column="1" Placeholder="Ton kho" Keyboard="Numeric" />
+                    </Grid>
+                    <Grid ColumnDefinitions="*,Auto" ColumnSpacing="12">
+                        <Entry x:Name="ImageEntry" Placeholder="URL/path hinh anh" />
+                        <Button Grid.Column="1" Text="Chon anh" Style="{StaticResource SecondaryButtonStyle}" Clicked="OnPickDetailImageClicked" />
+                    </Grid>
+                    <Editor x:Name="DescriptionEditor" Placeholder="Mo ta san pham" HeightRequest="120" AutoSize="TextChanges" />
+                    <Button x:Name="SaveButton" Text="Luu thay doi" Style="{StaticResource PrimaryButtonStyle}" Clicked="OnSaveClicked" />
+                </VerticalStackLayout>
+            </Border>
+
+            <Grid ColumnDefinitions="*,*" ColumnSpacing="18">
+                <Border Style="{StaticResource CardBorderStyle}">
+                    <VerticalStackLayout Spacing="12">
+                        <Label Text="Thong tin san pham" Style="{StaticResource SectionTitleLabel}" />
+                        <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto,Auto,Auto" RowSpacing="12">
+                            <Label Text="Danh muc" Style="{StaticResource CaptionLabel}" />
+                            <Label Grid.Column="1" Text="San pham" FontAttributes="Bold" />
+                            <Label Grid.Row="1" Text="Thuong hieu" Style="{StaticResource CaptionLabel}" />
+                            <Label Grid.Row="1" Grid.Column="1" Text="SyncChain" FontAttributes="Bold" />
+                            <Label Grid.Row="2" Text="Don vi tinh" Style="{StaticResource CaptionLabel}" />
+                            <Label Grid.Row="2" Grid.Column="1" Text="Cai" FontAttributes="Bold" />
+                            <Label Grid.Row="3" Text="Trang thai kho" Style="{StaticResource CaptionLabel}" />
+                            <Label x:Name="InventoryStateLabel" Grid.Row="3" Grid.Column="1" Text="-" FontAttributes="Bold" />
+                        </Grid>
+                    </VerticalStackLayout>
+                </Border>
+
+                <Border Grid.Column="1" Style="{StaticResource CardBorderStyle}">
+                    <VerticalStackLayout Spacing="14">
+                        <Label Text="Hieu suat ban hang" Style="{StaticResource SectionTitleLabel}" />
+                        <Grid ColumnDefinitions="*,*,*" ColumnSpacing="10">
+                            <Border BackgroundColor="#F4F6F8" StrokeThickness="0" Padding="14">
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="10" />
+                                </Border.StrokeShape>
+                                <VerticalStackLayout>
+                                    <Label x:Name="SoldMetricLabel" Text="0" FontSize="18" FontAttributes="Bold" HorizontalTextAlignment="Center" TextColor="{StaticResource PrimaryColor}" />
+                                    <Label Text="Da ban" FontSize="10" HorizontalTextAlignment="Center" />
+                                </VerticalStackLayout>
+                            </Border>
+                            <Border Grid.Column="1" BackgroundColor="#F4F6F8" StrokeThickness="0" Padding="14">
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="10" />
+                                </Border.StrokeShape>
+                                <VerticalStackLayout>
+                                    <Label x:Name="RevenueMetricLabel" Text="0 VND" FontSize="18" FontAttributes="Bold" HorizontalTextAlignment="Center" TextColor="{StaticResource PrimaryColor}" />
+                                    <Label Text="Doanh thu" FontSize="10" HorizontalTextAlignment="Center" />
+                                </VerticalStackLayout>
+                            </Border>
+                            <Border Grid.Column="2" BackgroundColor="#F4F6F8" StrokeThickness="0" Padding="14">
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="10" />
+                                </Border.StrokeShape>
+                                <VerticalStackLayout>
+                                    <Label x:Name="RatingMetricLabel" Text="0%" FontSize="18" FontAttributes="Bold" HorizontalTextAlignment="Center" TextColor="{StaticResource PrimaryColor}" />
+                                    <Label Text="Danh gia tot" FontSize="10" HorizontalTextAlignment="Center" />
+                                </VerticalStackLayout>
+                            </Border>
+                        </Grid>
+                        <ProgressBar x:Name="ConsumptionProgress" Progress="0" ProgressColor="{StaticResource PrimaryColor}" />
+                        <Label x:Name="PerformanceNoteLabel" Text="San pham dang duoc theo doi theo ton kho hien tai." Style="{StaticResource CaptionLabel}" />
+                    </VerticalStackLayout>
+                </Border>
+            </Grid>
+
+            <Border Style="{StaticResource CardBorderStyle}">
+                <VerticalStackLayout Spacing="12">
+                    <Grid ColumnDefinitions="*,Auto">
+                        <Label Text="Lich su nhap / xuat kho" Style="{StaticResource SectionTitleLabel}" />
+                        <Button Grid.Column="1" Text="Xem tat ca" Style="{StaticResource SecondaryButtonStyle}" />
+                    </Grid>
+                    <Grid ColumnDefinitions="*,*,*,*" RowDefinitions="Auto" RowSpacing="12">
+                        <Label Text="Thoi gian" Style="{StaticResource CaptionLabel}" />
+                        <Label Grid.Column="1" Text="Loai" Style="{StaticResource CaptionLabel}" />
+                        <Label Grid.Column="2" Text="So luong" Style="{StaticResource CaptionLabel}" />
+                        <Label Grid.Column="3" Text="Ghi chu" Style="{StaticResource CaptionLabel}" />
+                    </Grid>
+                    <VerticalStackLayout x:Name="HistoryList" Spacing="10" />
+                </VerticalStackLayout>
+            </Border>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

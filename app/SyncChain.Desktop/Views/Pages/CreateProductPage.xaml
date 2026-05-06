@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ContentPage x:Class="SyncChain.Desktop.Views.Pages.CreateProductPage"
+             xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             NavigationPage.HasNavigationBar="False">
+    <ScrollView Background="{StaticResource AppPageBackgroundBrush}">
+        <VerticalStackLayout Padding="30" Spacing="22">
+            <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="12">
+                <Button Text="Quay lai san pham" Style="{StaticResource SecondaryButtonStyle}" Clicked="OnBackClicked" />
+                <VerticalStackLayout Grid.Column="1">
+                    <Label Text="THEM SAN PHAM" Style="{StaticResource PageTitleLabel}" />
+                    <Label Text="Tao san pham moi voi hinh anh, gia ban, ton kho va mo ta." Style="{StaticResource CaptionLabel}" />
+                </VerticalStackLayout>
+                <Button x:Name="SaveButton"
+                        Grid.Column="2"
+                        Text="Tao san pham"
+                        Style="{StaticResource PrimaryButtonStyle}"
+                        Clicked="OnSaveClicked" />
+            </Grid>
+
+            <Grid ColumnDefinitions="0.9*,1.1*" ColumnSpacing="18">
+                <Border Style="{StaticResource CardBorderStyle}">
+                    <VerticalStackLayout Spacing="16">
+                        <Grid HeightRequest="320">
+                            <Border BackgroundColor="#E8EDF4" StrokeThickness="0">
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="18" />
+                                </Border.StrokeShape>
+                                <Image x:Name="PreviewImage" Aspect="AspectFill" />
+                                <Label x:Name="PreviewLabel"
+                                       Text="Anh san pham"
+                                       HorizontalOptions="Center"
+                                       VerticalOptions="Center"
+                                       TextColor="{StaticResource MutedColor}" />
+                            </Border>
+                        </Grid>
+                        <Grid ColumnDefinitions="*,Auto" ColumnSpacing="12">
+                            <Entry x:Name="ImageEntry" Placeholder="URL/path hinh anh" />
+                            <Button Grid.Column="1"
+                                    Text="Chon anh"
+                                    Style="{StaticResource SecondaryButtonStyle}"
+                                    Clicked="OnPickImageClicked" />
+                        </Grid>
+                    </VerticalStackLayout>
+                </Border>
+
+                <Border Grid.Column="1" Style="{StaticResource CardBorderStyle}">
+                    <VerticalStackLayout Spacing="14">
+                        <Label Text="Thong tin san pham" Style="{StaticResource SectionTitleLabel}" />
+                        <Entry x:Name="NameEntry" Placeholder="Ten san pham" />
+                        <Grid ColumnDefinitions="*,*" ColumnSpacing="12">
+                            <Entry x:Name="PriceEntry" Placeholder="Gia ban" Keyboard="Numeric" />
+                            <Entry x:Name="StockEntry" Grid.Column="1" Placeholder="Ton kho" Keyboard="Numeric" />
+                        </Grid>
+                        <Editor x:Name="DescriptionEditor"
+                                Placeholder="Mo ta san pham"
+                                HeightRequest="150"
+                                AutoSize="TextChanges" />
+                        <Label Text="Neu ton kho bang 0, san pham se o trang thai Ngung ban." Style="{StaticResource CaptionLabel}" />
+                    </VerticalStackLayout>
+                </Border>
+            </Grid>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

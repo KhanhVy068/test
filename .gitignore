@@ -1,0 +1,13 @@
+.vs/
+bin/
+obj/
+
+*.user
+*.suo
+*.cache
+*.pdb
+*.exe
+*.dll
+
+SyncChain.API/bin/
+SyncChain.API/obj/

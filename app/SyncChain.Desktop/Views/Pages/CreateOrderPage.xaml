@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ContentPage x:Class="SyncChain.Desktop.Views.Pages.CreateOrderPage"
+             xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             NavigationPage.HasNavigationBar="False">
+    <ScrollView Background="{StaticResource AppPageBackgroundBrush}">
+        <VerticalStackLayout Padding="30" Spacing="24">
+            <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="12">
+                <Button Text="Quay lai don hang" Style="{StaticResource SecondaryButtonStyle}" Clicked="OnBackClicked" />
+                <VerticalStackLayout Grid.Column="1">
+                    <Label Text="TAO DON HANG MOI" Style="{StaticResource PageTitleLabel}" />
+                    <Label Text="Chon san pham, nhap so luong va tao don hang tren backend." Style="{StaticResource CaptionLabel}" />
+                </VerticalStackLayout>
+                <Button Grid.Column="2" Text="Lam moi" Style="{StaticResource SecondaryButtonStyle}" Clicked="OnResetClicked" />
+            </Grid>
+
+            <Grid ColumnDefinitions="1.25*,0.75*" ColumnSpacing="18">
+                <VerticalStackLayout Spacing="18">
+                    <Border Style="{StaticResource CardBorderStyle}">
+                        <VerticalStackLayout Spacing="14">
+                            <Label Text="San pham" Style="{StaticResource SectionTitleLabel}" />
+
+                            <Grid ColumnDefinitions="2*,120,Auto" ColumnSpacing="12">
+                                <Picker x:Name="ProductPicker"
+                                        Title="Chon san pham"
+                                        ItemsSource="{Binding Products}"
+                                        ItemDisplayBinding="{Binding Name}" />
+                                <Entry x:Name="QuantityEntry"
+                                       Grid.Column="1"
+                                       Text="1"
+                                       Keyboard="Numeric"
+                                       Placeholder="So luong" />
+                                <Button Grid.Column="2"
+                                        Text="+ Them"
+                                        Style="{StaticResource SecondaryButtonStyle}"
+                                        Clicked="OnAddProductClicked" />
+                            </Grid>
+
+                            <VerticalStackLayout BindableLayout.ItemsSource="{Binding Lines}" Spacing="12">
+                                <BindableLayout.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border BackgroundColor="White" Stroke="{StaticResource BorderColor}" StrokeThickness="1" Padding="14">
+                                            <Border.StrokeShape>
+                                                <RoundRectangle CornerRadius="16" />
+                                            </Border.StrokeShape>
+                                            <Grid ColumnDefinitions="64,*,Auto,120,Auto" ColumnSpacing="14">
+                                                <Border BackgroundColor="#E8EDF4" StrokeThickness="0" WidthRequest="52" HeightRequest="52">
+                                                    <Border.StrokeShape>
+                                                        <RoundRectangle CornerRadius="14" />
+                                                    </Border.StrokeShape>
+                                                    <Label Text="{Binding Initials}" HorizontalOptions="Center" VerticalOptions="Center" FontAttributes="Bold" TextColor="{StaticResource PrimaryColor}" />
+                                                </Border>
+
+                                                <VerticalStackLayout Grid.Column="1" Spacing="2">
+                                                    <Label Text="{Binding Name}" FontAttributes="Bold" />
+                                                    <Label Text="{Binding Variant}" Style="{StaticResource CaptionLabel}" />
+                                                </VerticalStackLayout>
+
+                                                <HorizontalStackLayout Grid.Column="2" Spacing="6" VerticalOptions="Center">
+                                                    <Button Text="-" Style="{StaticResource SecondaryButtonStyle}" Padding="10,6" Clicked="OnDecreaseQuantityClicked" CommandParameter="{Binding .}" />
+                                                    <Label Text="{Binding Quantity}" VerticalTextAlignment="Center" WidthRequest="30" HorizontalTextAlignment="Center" />
+                                                    <Button Text="+" Style="{StaticResource SecondaryButtonStyle}" Padding="10,6" Clicked="OnIncreaseQuantityClicked" CommandParameter="{Binding .}" />
+                                                </HorizontalStackLayout>
+
+                                                <VerticalStackLayout Grid.Column="3" VerticalOptions="Center" Spacing="2">
+                                                    <Label Text="{Binding Price}" FontAttributes="Bold" HorizontalTextAlignment="End" />
+                                                    <Label Text="{Binding LineTotalText}" Style="{StaticResource CaptionLabel}" HorizontalTextAlignment="End" />
+                                                </VerticalStackLayout>
+
+                                                <Button Grid.Column="4" Text="X" Style="{StaticResource SecondaryButtonStyle}" Clicked="OnRemoveLineClicked" CommandParameter="{Binding .}" />
+                                            </Grid>
+                                        </Border>
+                                    </DataTemplate>
+                                </BindableLayout.ItemTemplate>
+                            </VerticalStackLayout>
+                        </VerticalStackLayout>
+                    </Border>
+
+                    <Border Style="{StaticResource CardBorderStyle}">
+                        <VerticalStackLayout Spacing="12">
+                            <Label Text="Ghi chu don hang" Style="{StaticResource SectionTitleLabel}" />
+                            <Editor Placeholder="Ghi chu hien chua duoc backend luu..." HeightRequest="120" />
+                        </VerticalStackLayout>
+                    </Border>
+                </VerticalStackLayout>
+
+                <VerticalStackLayout Grid.Column="1" Spacing="18">
+                    <Border Style="{StaticResource CardBorderStyle}">
+                        <VerticalStackLayout Spacing="12">
+                            <Label Text="Tom tat don hang" Style="{StaticResource SectionTitleLabel}" />
+                            <Grid ColumnDefinitions="*,Auto">
+                                <Label Text="Tam tinh" />
+                                <Label x:Name="SubtotalLabel" Grid.Column="1" Text="0 VND" FontAttributes="Bold" />
+                            </Grid>
+                            <Grid ColumnDefinitions="*,Auto">
+                                <Label Text="Phi van chuyen" />
+                                <Label Grid.Column="1" Text="0 VND" FontAttributes="Bold" />
+                            </Grid>
+                            <Grid ColumnDefinitions="*,Auto">
+                                <Label Text="Giam gia" />
+                                <Label Grid.Column="1" Text="0 VND" FontAttributes="Bold" />
+                            </Grid>
+                            <Grid ColumnDefinitions="*,Auto">
+                                <Label Text="Tong cong" FontAttributes="Bold" />
+                                <Label x:Name="TotalLabel" Grid.Column="1" Text="0 VND" FontSize="22" FontAttributes="Bold" />
+                            </Grid>
+                            <Button x:Name="CreateOrderButton" Text="Tao don hang" Style="{StaticResource PrimaryButtonStyle}" Clicked="OnCreateOrderClicked" />
+                        </VerticalStackLayout>
+                    </Border>
+
+                    <Border Style="{StaticResource CardBorderStyle}">
+                        <VerticalStackLayout Spacing="12" BindableLayout.ItemsSource="{Binding Payments}">
+                            <Label Text="Thanh toan" Style="{StaticResource SectionTitleLabel}" />
+                            <BindableLayout.ItemTemplate>
+                                <DataTemplate>
+                                    <Border Stroke="{StaticResource BorderColor}" BackgroundColor="{Binding IsSelected, Converter={StaticResource BoolToColorConverter}, ConverterParameter=SelectedPayment}" Padding="12">
+                                        <Border.StrokeShape>
+                                            <RoundRectangle CornerRadius="16" />
+                                        </Border.StrokeShape>
+                                        <Label Text="{Binding Name}" />
+                                    </Border>
+                                </DataTemplate>
+                            </BindableLayout.ItemTemplate>
+                        </VerticalStackLayout>
+                    </Border>
+                </VerticalStackLayout>
+            </Grid>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ContentPage x:Class="SyncChain.Desktop.Views.Pages.UserAccessPage"
+             xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             NavigationPage.HasNavigationBar="False">
+    <ScrollView Background="{StaticResource AppPageBackgroundBrush}">
+        <VerticalStackLayout Padding="30" Spacing="22">
+            <Grid ColumnDefinitions="*,Auto,Auto" ColumnSpacing="12">
+                <VerticalStackLayout>
+                    <Label Text="NGUOI DUNG VA PHAN QUYEN" Style="{StaticResource PageTitleLabel}" />
+                    <Label x:Name="RoleHintLabel" Text="Chi admin duoc quan ly tai khoan manager/staff." Style="{StaticResource CaptionLabel}" />
+                </VerticalStackLayout>
+                <Button Grid.Column="1" Text="Lam moi" Style="{StaticResource SecondaryButtonStyle}" Clicked="OnRefreshClicked" />
+                <Button Grid.Column="2" Text="Dang xuat" Style="{StaticResource PrimaryButtonStyle}" Clicked="OnLogoutClicked" />
+            </Grid>
+
+            <Grid ColumnDefinitions="*,*,*,*" ColumnSpacing="16">
+                <Border Style="{StaticResource CardBorderStyle}">
+                    <VerticalStackLayout>
+                        <Label Text="Tong noi bo" Style="{StaticResource CaptionLabel}" />
+                        <Label x:Name="TotalUsersLabel" Text="0" FontSize="28" FontAttributes="Bold" />
+                    </VerticalStackLayout>
+                </Border>
+                <Border Grid.Column="1" Style="{StaticResource CardBorderStyle}">
+                    <VerticalStackLayout>
+                        <Label Text="Manager" Style="{StaticResource CaptionLabel}" />
+                        <Label x:Name="ManagerUsersLabel" Text="0" FontSize="28" FontAttributes="Bold" />
+                    </VerticalStackLayout>
+                </Border>
+                <Border Grid.Column="2" Style="{StaticResource CardBorderStyle}">
+                    <VerticalStackLayout>
+                        <Label Text="Staff" Style="{StaticResource CaptionLabel}" />
+                        <Label x:Name="StaffUsersLabel" Text="0" FontSize="28" FontAttributes="Bold" />
+                    </VerticalStackLayout>
+                </Border>
+                <Border Grid.Column="3" Style="{StaticResource CardBorderStyle}">
+                    <VerticalStackLayout>
+                        <Label Text="Dang khoa" Style="{StaticResource CaptionLabel}" />
+                        <Label x:Name="LockedUsersLabel" Text="0" FontSize="28" FontAttributes="Bold" />
+                    </VerticalStackLayout>
+                </Border>
+            </Grid>
+
+            <Grid ColumnDefinitions="0.9*,1.1*" ColumnSpacing="18">
+                <Border x:Name="CreatePanel" Style="{StaticResource CardBorderStyle}">
+                    <VerticalStackLayout Spacing="14">
+                        <Label Text="Tao tai khoan noi bo" Style="{StaticResource SectionTitleLabel}" />
+                        <Label Text="Admin tao tai khoan manager hoac staff. Khach hang tu dang ky o man hinh Register." Style="{StaticResource CaptionLabel}" />
+
+                        <Entry x:Name="UsernameEntry" Placeholder="Ten hien thi / username" />
+                        <Entry x:Name="EmailEntry" Placeholder="Email cong viec" Keyboard="Email" />
+                        <Entry x:Name="PasswordEntry" Placeholder="Mat khau tam thoi" IsPassword="True" Text="123456" />
+
+                        <Grid ColumnDefinitions="*,*" ColumnSpacing="12">
+                            <Button x:Name="ManagerRoleButton" Text="Manager" Style="{StaticResource PrimaryButtonStyle}" Clicked="OnManagerRoleClicked" />
+                            <Button x:Name="StaffRoleButton" Grid.Column="1" Text="Staff" Style="{StaticResource SecondaryButtonStyle}" Clicked="OnStaffRoleClicked" />
+                        </Grid>
+
+                        <Button x:Name="CreateUserButton" Text="Tao tai khoan" Style="{StaticResource PrimaryButtonStyle}" Clicked="OnCreateUserClicked" />
+                    </VerticalStackLayout>
+                </Border>
+
+                <Border Grid.Column="1" Style="{StaticResource CardBorderStyle}">
+                    <VerticalStackLayout Spacing="14">
+                        <Grid ColumnDefinitions="*,Auto">
+                            <Label Text="Danh sach manager/staff" Style="{StaticResource SectionTitleLabel}" />
+                            <Label x:Name="PermissionLabel" Grid.Column="1" Text="-" Style="{StaticResource CaptionLabel}" VerticalTextAlignment="Center" />
+                        </Grid>
+
+                        <Grid ColumnDefinitions="1.1*,1.4*,0.7*,0.8*,Auto,Auto,Auto" Padding="10,0">
+                            <Label Text="Ma" Style="{StaticResource CaptionLabel}" />
+                            <Label Grid.Column="1" Text="Email" Style="{StaticResource CaptionLabel}" />
+                            <Label Grid.Column="2" Text="Role" Style="{StaticResource CaptionLabel}" />
+                            <Label Grid.Column="3" Text="Trang thai" Style="{StaticResource CaptionLabel}" />
+                        </Grid>
+
+                        <VerticalStackLayout BindableLayout.ItemsSource="{Binding Users}" Spacing="10">
+                            <BindableLayout.ItemTemplate>
+                                <DataTemplate>
+                                    <Border BackgroundColor="#F4F6F8" StrokeThickness="0" Padding="10">
+                                        <Border.StrokeShape>
+                                            <RoundRectangle CornerRadius="12" />
+                                        </Border.StrokeShape>
+                                        <Grid ColumnDefinitions="1.1*,1.4*,0.7*,0.8*,Auto,Auto,Auto" ColumnSpacing="8">
+                                            <Label Text="{Binding Code}" FontAttributes="Bold" VerticalTextAlignment="Center" />
+                                            <VerticalStackLayout Grid.Column="1" Spacing="2">
+                                                <Label Text="{Binding Email}" FontAttributes="Bold" />
+                                                <Label Text="{Binding Username}" Style="{StaticResource CaptionLabel}" />
+                                            </VerticalStackLayout>
+                                            <Label Grid.Column="2" Text="{Binding RoleLabel}" VerticalTextAlignment="Center" />
+                                            <Label Grid.Column="3" Text="{Binding StatusText}" TextColor="{Binding StatusColor}" FontAttributes="Bold" VerticalTextAlignment="Center" />
+                                            <Button Grid.Column="4" Text="Doi role" Style="{StaticResource SecondaryButtonStyle}" Clicked="OnChangeRoleClicked" CommandParameter="{Binding .}" />
+                                            <Button Grid.Column="5" Text="{Binding ToggleText}" Style="{StaticResource SecondaryButtonStyle}" Clicked="OnToggleActiveClicked" CommandParameter="{Binding .}" />
+                                            <Button Grid.Column="6" Text="Reset MK" Style="{StaticResource SecondaryButtonStyle}" Clicked="OnResetPasswordClicked" CommandParameter="{Binding .}" />
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </BindableLayout.ItemTemplate>
+                        </VerticalStackLayout>
+
+                        <Label x:Name="EmptyLabel" Text="Chua co tai khoan manager/staff." Style="{StaticResource CaptionLabel}" HorizontalOptions="Center" IsVisible="False" />
+                    </VerticalStackLayout>
+                </Border>
+            </Grid>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>
