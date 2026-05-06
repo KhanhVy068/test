@@ -21,6 +21,7 @@ public class OrderController : ControllerBase
         _db = db;
     }
 
+    // Tạo đơn hàng mới cho người dùng hiện tại.
     [Authorize(Policy = "OrderWrite")]
     [HttpPost]
     public IActionResult CreateOrder(CreateOrderDTO dto)
@@ -34,6 +35,7 @@ public class OrderController : ControllerBase
         return Ok(result);
     }
 
+    // Lấy danh sách đơn, lọc theo role của người dùng.
     [Authorize]
     [HttpGet]
     public IActionResult GetOrders()
@@ -75,6 +77,7 @@ public class OrderController : ControllerBase
         return Ok(orders);
     }
 
+    // Lấy chi tiết đơn và kiểm tra quyền xem.
     [Authorize]
     [HttpGet("{id}")]
     public IActionResult GetOrderDetail(int id)
@@ -113,6 +116,7 @@ public class OrderController : ControllerBase
         return Ok(details);
     }
 
+    // Lấy toàn bộ đơn cho nhân sự nội bộ quản lý.
     [Authorize(Policy = "OrderManage")]
     [HttpGet("full")]
     public IActionResult GetFullOrders()
@@ -132,6 +136,7 @@ public class OrderController : ControllerBase
         return Ok(orders);
     }
 
+    // Cập nhật trạng thái xử lý đơn hàng.
     [Authorize(Policy = "OrderManage")]
     [HttpPut("{id}/status")]
     public IActionResult UpdateStatus(int id, string status)
@@ -155,17 +160,20 @@ public class OrderController : ControllerBase
         return Ok("Cap nhat thanh cong");
     }
 
+    // Đọc mã người dùng từ JWT.
     private int? GetUserId()
     {
         var claim = User.FindFirst("user_id")?.Value;
         return int.TryParse(claim, out var userId) ? userId : null;
     }
 
+    // Đọc role hiện tại từ JWT.
     private string GetRole()
     {
         return User.FindFirst(ClaimTypes.Role)?.Value ?? string.Empty;
     }
 
+    // Kiểm tra role thuộc nhóm nhân sự nội bộ.
     private static bool IsInternalRole(string role)
     {
         return role is "admin" or "manager" or "staff";

@@ -6,32 +6,32 @@
     <ScrollView Background="{StaticResource AppPageBackgroundBrush}">
         <VerticalStackLayout Padding="30" Spacing="24">
             <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="12">
-                <Button Text="Quay lai don hang" Style="{StaticResource SecondaryButtonStyle}" Clicked="OnBackClicked" />
+                <Button Text="Quay lại đơn hàng" Style="{StaticResource SecondaryButtonStyle}" Clicked="OnBackClicked" />
                 <VerticalStackLayout Grid.Column="1">
-                    <Label Text="TAO DON HANG MOI" Style="{StaticResource PageTitleLabel}" />
-                    <Label Text="Chon san pham, nhap so luong va tao don hang tren backend." Style="{StaticResource CaptionLabel}" />
+                    <Label Text="TẠO ĐƠN HÀNG MỚI" Style="{StaticResource PageTitleLabel}" />
+                    <Label Text="Chọn sản phẩm, nhập số lượng và tạo đơn hàng." Style="{StaticResource CaptionLabel}" />
                 </VerticalStackLayout>
-                <Button Grid.Column="2" Text="Lam moi" Style="{StaticResource SecondaryButtonStyle}" Clicked="OnResetClicked" />
+                <Button Grid.Column="2" Text="Làm mới" Style="{StaticResource SecondaryButtonStyle}" Clicked="OnResetClicked" />
             </Grid>
 
             <Grid ColumnDefinitions="1.25*,0.75*" ColumnSpacing="18">
                 <VerticalStackLayout Spacing="18">
                     <Border Style="{StaticResource CardBorderStyle}">
                         <VerticalStackLayout Spacing="14">
-                            <Label Text="San pham" Style="{StaticResource SectionTitleLabel}" />
+                            <Label Text="Sản phẩm" Style="{StaticResource SectionTitleLabel}" />
 
                             <Grid ColumnDefinitions="2*,120,Auto" ColumnSpacing="12">
                                 <Picker x:Name="ProductPicker"
-                                        Title="Chon san pham"
+                                        Title="Chọn sản phẩm"
                                         ItemsSource="{Binding Products}"
                                         ItemDisplayBinding="{Binding Name}" />
                                 <Entry x:Name="QuantityEntry"
                                        Grid.Column="1"
                                        Text="1"
                                        Keyboard="Numeric"
-                                       Placeholder="So luong" />
+                                       Placeholder="Số lượng" />
                                 <Button Grid.Column="2"
-                                        Text="+ Them"
+                                        Text="+ Thêm"
                                         Style="{StaticResource SecondaryButtonStyle}"
                                         Clicked="OnAddProductClicked" />
                             </Grid>
@@ -78,8 +78,8 @@
 
                     <Border Style="{StaticResource CardBorderStyle}">
                         <VerticalStackLayout Spacing="12">
-                            <Label Text="Ghi chu don hang" Style="{StaticResource SectionTitleLabel}" />
-                            <Editor Placeholder="Ghi chu hien chua duoc backend luu..." HeightRequest="120" />
+                            <Label Text="Ghi chú đơn hàng" Style="{StaticResource SectionTitleLabel}" />
+                            <Editor Placeholder="Ghi chú hiện chưa được backend lưu..." HeightRequest="120" />
                         </VerticalStackLayout>
                     </Border>
                 </VerticalStackLayout>
@@ -87,30 +87,30 @@
                 <VerticalStackLayout Grid.Column="1" Spacing="18">
                     <Border Style="{StaticResource CardBorderStyle}">
                         <VerticalStackLayout Spacing="12">
-                            <Label Text="Tom tat don hang" Style="{StaticResource SectionTitleLabel}" />
+                            <Label Text="Tóm tắt đơn hàng" Style="{StaticResource SectionTitleLabel}" />
                             <Grid ColumnDefinitions="*,Auto">
-                                <Label Text="Tam tinh" />
+                                <Label Text="Tạm tính" />
                                 <Label x:Name="SubtotalLabel" Grid.Column="1" Text="0 VND" FontAttributes="Bold" />
                             </Grid>
                             <Grid ColumnDefinitions="*,Auto">
-                                <Label Text="Phi van chuyen" />
+                                <Label Text="Phí vận chuyển" />
                                 <Label Grid.Column="1" Text="0 VND" FontAttributes="Bold" />
                             </Grid>
                             <Grid ColumnDefinitions="*,Auto">
-                                <Label Text="Giam gia" />
+                                <Label Text="Giảm giá" />
                                 <Label Grid.Column="1" Text="0 VND" FontAttributes="Bold" />
                             </Grid>
                             <Grid ColumnDefinitions="*,Auto">
-                                <Label Text="Tong cong" FontAttributes="Bold" />
+                                <Label Text="Tổng cộng" FontAttributes="Bold" />
                                 <Label x:Name="TotalLabel" Grid.Column="1" Text="0 VND" FontSize="22" FontAttributes="Bold" />
                             </Grid>
-                            <Button x:Name="CreateOrderButton" Text="Tao don hang" Style="{StaticResource PrimaryButtonStyle}" Clicked="OnCreateOrderClicked" />
+                            <Button x:Name="CreateOrderButton" Text="Tạo đơn hàng" Style="{StaticResource PrimaryButtonStyle}" Clicked="OnCreateOrderClicked" />
                         </VerticalStackLayout>
                     </Border>
 
                     <Border Style="{StaticResource CardBorderStyle}">
                         <VerticalStackLayout Spacing="12" BindableLayout.ItemsSource="{Binding Payments}">
-                            <Label Text="Thanh toan" Style="{StaticResource SectionTitleLabel}" />
+                            <Label Text="Thanh toán" Style="{StaticResource SectionTitleLabel}" />
                             <BindableLayout.ItemTemplate>
                                 <DataTemplate>
                                     <Border Stroke="{StaticResource BorderColor}" BackgroundColor="{Binding IsSelected, Converter={StaticResource BoolToColorConverter}, ConverterParameter=SelectedPayment}" Padding="12">

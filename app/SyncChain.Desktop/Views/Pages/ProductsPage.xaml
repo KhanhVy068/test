@@ -8,13 +8,13 @@
         <VerticalStackLayout Padding="30" Spacing="24">
             <Grid ColumnDefinitions="*,Auto,Auto" ColumnSpacing="12">
                 <VerticalStackLayout>
-                    <Label Text="QUAN LY SAN PHAM" Style="{StaticResource PageTitleLabel}" />
-                    <Label Text="Xem, them, sua va xoa san pham theo quyen admin/manager." Style="{StaticResource CaptionLabel}" FontSize="14" />
+                    <Label Text="QUẢN LÝ SẢN PHẨM" Style="{StaticResource PageTitleLabel}" />
+                    <Label Text="Xem, thêm, sửa và xóa sản phẩm theo quyền admin/manager." Style="{StaticResource CaptionLabel}" FontSize="14" />
                 </VerticalStackLayout>
-                <Button Grid.Column="1" Text="Lam moi" Style="{StaticResource SecondaryButtonStyle}" Clicked="OnRefreshClicked" />
+                <Button Grid.Column="1" Text="Làm mới" Style="{StaticResource SecondaryButtonStyle}" Clicked="OnRefreshClicked" />
                 <Button x:Name="ShowCreateFormButton"
                         Grid.Column="2"
-                        Text="+ Them san pham"
+                        Text="+ Thêm sản phẩm"
                         Style="{StaticResource PrimaryButtonStyle}"
                         Clicked="OnShowCreateFormClicked" />
             </Grid>
@@ -22,25 +22,25 @@
             <Grid ColumnDefinitions="*,*,*,*" ColumnSpacing="18">
                 <Border Style="{StaticResource CardBorderStyle}">
                     <VerticalStackLayout Spacing="10">
-                        <Label Text="TONG SAN PHAM" Style="{StaticResource CaptionLabel}" />
+                        <Label Text="TỔNG SẢN PHẨM" Style="{StaticResource CaptionLabel}" />
                         <Label x:Name="TotalProductsLabel" Text="0" FontSize="30" FontAttributes="Bold" />
                     </VerticalStackLayout>
                 </Border>
                 <Border Grid.Column="1" Style="{StaticResource CardBorderStyle}">
                     <VerticalStackLayout Spacing="10">
-                        <Label Text="DANG BAN" Style="{StaticResource CaptionLabel}" />
+                        <Label Text="ĐANG BÁN" Style="{StaticResource CaptionLabel}" />
                         <Label x:Name="ActiveProductsLabel" Text="0" FontSize="30" FontAttributes="Bold" />
                     </VerticalStackLayout>
                 </Border>
                 <Border Grid.Column="2" Style="{StaticResource CardBorderStyle}">
                     <VerticalStackLayout Spacing="10">
-                        <Label Text="SAP HET HANG" Style="{StaticResource CaptionLabel}" />
+                        <Label Text="SẮP HẾT HÀNG" Style="{StaticResource CaptionLabel}" />
                         <Label x:Name="LowStockProductsLabel" Text="0" FontSize="30" FontAttributes="Bold" />
                     </VerticalStackLayout>
                 </Border>
                 <Border Grid.Column="3" Style="{StaticResource CardBorderStyle}">
                     <VerticalStackLayout Spacing="10">
-                        <Label Text="NGUNG BAN" Style="{StaticResource CaptionLabel}" />
+                        <Label Text="NGỪNG BÁN" Style="{StaticResource CaptionLabel}" />
                         <Label x:Name="OutOfStockProductsLabel" Text="0" FontSize="30" FontAttributes="Bold" />
                     </VerticalStackLayout>
                 </Border>
@@ -52,10 +52,10 @@
                         <RoundRectangle CornerRadius="12" />
                     </Border.StrokeShape>
                     <Grid ColumnDefinitions="Auto,*" ColumnSpacing="10" HeightRequest="42">
-                        <Label Text="Search" VerticalTextAlignment="Center" TextColor="{StaticResource MutedColor}" />
+                        <Label Text="Tìm kiếm" VerticalTextAlignment="Center" TextColor="{StaticResource MutedColor}" />
                         <Entry x:Name="SearchEntry"
                                Grid.Column="1"
-                               Placeholder="Tim kiem san pham..."
+                               Placeholder="Tìm kiếm sản phẩm..."
                                BackgroundColor="Transparent"
                                TextChanged="OnSearchTextChanged" />
                     </Grid>
@@ -70,12 +70,25 @@
                             <VerticalStackLayout Spacing="14">
                                 <Grid HeightRequest="150">
                                     <Border BackgroundColor="#E8EDF4" StrokeThickness="0">
-                                        <Border.StrokeShape>
-                                            <RoundRectangle CornerRadius="22,22,0,0" />
-                                        </Border.StrokeShape>
-                                        <Image Source="{Binding DisplayImageSource}" Aspect="AspectFill" IsVisible="{Binding HasImage}" />
-                                        <Label Text="{Binding Initials}" IsVisible="{Binding ShowInitials}" HorizontalOptions="Center" VerticalOptions="Center" FontSize="48" FontAttributes="Bold" TextColor="{StaticResource PrimaryColor}" />
-                                    </Border>
+    <Border.StrokeShape>
+        <RoundRectangle CornerRadius="22,22,0,0" />
+    </Border.StrokeShape>
+    <Grid>
+        <Image Source="{Binding DisplayImageSource}"
+               Aspect="AspectFill"
+               IsVisible="{Binding HasImage}"
+               HorizontalOptions="Fill"
+               VerticalOptions="Fill" />
+        <Label Text="{Binding Initials}"
+               IsVisible="{Binding ShowInitials}"
+               HorizontalOptions="Center"
+               VerticalOptions="Center"
+               FontSize="48"
+               FontAttributes="Bold"
+               TextColor="{StaticResource PrimaryColor}" />
+    </Grid>
+</Border>
+
                                     <Border BackgroundColor="{Binding BadgeColor}" StrokeThickness="0" HorizontalOptions="End" VerticalOptions="Start" Margin="14" Padding="10,4">
                                         <Border.StrokeShape>
                                             <RoundRectangle CornerRadius="999" />
@@ -91,25 +104,25 @@
 
                                     <Grid ColumnDefinitions="*,*" ColumnSpacing="12">
                                         <VerticalStackLayout>
-                                            <Label Text="Gia ban" Style="{StaticResource CaptionLabel}" />
+                                            <Label Text="Giá bán" Style="{StaticResource CaptionLabel}" />
                                             <Label Text="{Binding Price}" FontAttributes="Bold" />
                                         </VerticalStackLayout>
                                         <VerticalStackLayout Grid.Column="1">
-                                            <Label Text="Ton kho" Style="{StaticResource CaptionLabel}" />
+                                            <Label Text="Tồn kho" Style="{StaticResource CaptionLabel}" />
                                             <Label Text="{Binding Stock}" FontAttributes="Bold" />
                                         </VerticalStackLayout>
                                     </Grid>
 
                                     <Grid ColumnDefinitions="*,Auto,Auto" ColumnSpacing="8">
-                                        <Button Text="Chi tiet" Style="{StaticResource SecondaryButtonStyle}" Clicked="OnOpenDetailClicked" CommandParameter="{Binding .}" />
+                                        <Button Text="Chi tiết" Style="{StaticResource SecondaryButtonStyle}" Clicked="OnOpenDetailClicked" CommandParameter="{Binding .}" />
                                         <Button Grid.Column="1"
-                                                Text="Sua"
+                                                Text="Sửa"
                                                 Style="{StaticResource SecondaryButtonStyle}"
                                                 Clicked="OnEditProductClicked"
                                                 CommandParameter="{Binding .}"
                                                 IsVisible="{Binding Source={x:Reference RootPage}, Path=CanManageProducts}" />
                                         <Button Grid.Column="2"
-                                                Text="Xoa"
+                                                Text="Xóa"
                                                 Style="{StaticResource SecondaryButtonStyle}"
                                                 Clicked="OnDeleteProductClicked"
                                                 CommandParameter="{Binding .}"
@@ -122,7 +135,7 @@
                 </BindableLayout.ItemTemplate>
             </FlexLayout>
 
-            <Label x:Name="EmptyLabel" Text="Khong co san pham phu hop." Style="{StaticResource CaptionLabel}" HorizontalOptions="Center" IsVisible="False" />
+            <Label x:Name="EmptyLabel" Text="Không có sản phẩm phù hợp." Style="{StaticResource CaptionLabel}" HorizontalOptions="Center" IsVisible="False" />
         </VerticalStackLayout>
     </ScrollView>
 </ContentPage>

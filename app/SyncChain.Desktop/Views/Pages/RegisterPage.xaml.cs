@@ -9,6 +9,7 @@ public partial class RegisterPage : ContentPage
 		InitializeComponent();
 	}
 
+	// Kiểm tra dữ liệu đăng ký và gửi yêu cầu tạo tài khoản.
 	private async void OnRegisterClicked(object? sender, EventArgs e)
 	{
 		var email = EmailEntry.Text?.Trim() ?? string.Empty;
@@ -17,13 +18,13 @@ public partial class RegisterPage : ContentPage
 
 		if (string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(password))
 		{
-			await DisplayAlert("Dang ky", "Vui long nhap email va mat khau.", "OK");
+			await DisplayAlert("Đăng ký", "Vui lòng nhập email và mật khẩu.", "OK");
 			return;
 		}
 
 		if (password != confirmPassword)
 		{
-			await DisplayAlert("Dang ky", "Mat khau xac nhan khong khop.", "OK");
+			await DisplayAlert("Đăng ký", "Mật khẩu xác nhận không khớp.", "OK");
 			return;
 		}
 
@@ -32,12 +33,12 @@ public partial class RegisterPage : ContentPage
 		try
 		{
 			await SyncChainApiClient.Instance.RegisterAsync(email, password);
-			await DisplayAlert("Dang ky", "Tao tai khoan thanh cong. Hay dang nhap de vao he thong.", "OK");
+			await DisplayAlert("Đăng ký", "Tạo tài khoản thành công. Hãy đăng nhập để vào hệ thống.", "OK");
 			await Navigation.PopAsync();
 		}
 		catch (Exception ex)
 		{
-			await DisplayAlert("Khong the dang ky", ex.Message, "OK");
+			await DisplayAlert("Không thể đăng ký", ex.Message, "OK");
 		}
 		finally
 		{
@@ -45,6 +46,7 @@ public partial class RegisterPage : ContentPage
 		}
 	}
 
+	// Quay lại màn hình đăng nhập.
 	private async void OnBackClicked(object? sender, EventArgs e)
 	{
 		await Navigation.PopAsync();

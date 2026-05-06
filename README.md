@@ -1,221 +1,219 @@
-Ý nghĩa các thư mục
+# NT106_SyncChain
 
+SyncChain là ứng dụng quản lý bán hàng và tồn kho gồm:
 
-Thư mục chính: SyncChain.API
+- Backend API viết bằng ASP.NET Core.
+- Ứng dụng desktop viết bằng .NET MAUI.
+- Cơ sở dữ liệu SQLite lưu trong thư mục `database`.
+- Swagger/Postman để kiểm thử API.
 
-Đây là phần backend chính của hệ thống.
+## Chức năng chính
 
-```Controllers/```
+- Đăng ký, đăng nhập và xác thực bằng JWT.
+- Phân quyền người dùng theo vai trò: `customer`, `staff`, `manager`, `admin`.
+- Quản lý sản phẩm, giá bán, giá nhập, hình ảnh, tồn kho và trạng thái bán hàng.
+- Tạo đơn hàng, xem chi tiết đơn hàng và cập nhật trạng thái xử lý.
+- Nhập kho và xem lịch sử giao dịch kho.
+- Dashboard báo cáo doanh thu, đơn hàng, sản phẩm bán chạy và cảnh báo tồn kho thấp.
+- Quản trị tài khoản nội bộ dành cho admin.
 
-Chứa các API endpoint.
+## Yêu cầu môi trường
 
-Mỗi controller xử lý một nhóm chức năng.
+- Windows 10 trở lên.
+- .NET SDK có hỗ trợ:
+  - `net10.0` cho `SyncChain.API`.
+  - `net9.0-windows10.0.19041.0` và workload MAUI cho `SyncChain.Desktop`.
+- Visual Studio 2022 hoặc JetBrains Rider/VS Code có hỗ trợ .NET MAUI nếu muốn chạy app desktop bằng IDE.
+- Node.js chỉ cần nếu muốn chạy thử phần script mẫu trong `src`.
 
-- AdminController.cs
+Cài MAUI workload nếu máy chưa có:
 
-Quản lý chức năng admin:
+```powershell
+dotnet workload install maui
+```
 
-tạo tài khoản nội bộ
-reset mật khẩu
-quản lý người dùng
-AuthController.cs
+## Cách chạy dự án
 
-Xử lý xác thực:
+### 1. Clone hoặc mở thư mục dự án
 
-đăng ký
-đăng nhập
-authentication
-OrderController.cs
+```powershell
+cd NT106_SyncChain
+```
 
-Quản lý đơn hàng:
+### 2. Restore package .NET
 
-tạo đơn hàng
-cập nhật trạng thái
-xem danh sách đơn
+```powershell
+dotnet restore NT106_SyncChain.sln
+```
 
-- ProductController.cs
+### 3. Chạy Backend API
 
-Quản lý sản phẩm:
+```powershell
+dotnet run --project SyncChain.API\SyncChain.API.csproj
+```
 
-thêm sản phẩm
-cập nhật sản phẩm
-import kho
-xem sản phẩm
-- ReportController.cs
+API mặc định chạy tại:
 
-Xuất báo cáo và thống kê:
+- `http://localhost:5292`
+- Swagger: `http://localhost:5292/swagger`
 
-doanh thu
-tồn kho
-số lượng đơn hàng
-```Data/```
+Khi API khởi động, chương trình sẽ tự đảm bảo database tồn tại, bổ sung một số cột/bảng còn thiếu và seed các vai trò mặc định.
 
-Chứa lớp kết nối database.
+Tài khoản admin mặc định:
 
-- AppDbContext.cs
+```text
+Email: admin@gmail.com
+Password: 123456
+```
 
-DbContext chính của Entity Framework Core.
+### 4. Chạy ứng dụng Desktop
 
-Khai báo:
+Mở terminal khác và chạy:
 
-DbSet<SanPham>
-DbSet<DonHang>
-DbSet<NguoiDung>
+```powershell
+dotnet run --project app\SyncChain.Desktop\SyncChain.Desktop.csproj
+```
 
-Quản lý kết nối giữa model và database.
+Lưu ý: app desktop đang gọi API tại `http://localhost:5292/`, vì vậy cần chạy API trước khi đăng nhập hoặc sử dụng dữ liệu thật.
 
-```DTOs/```
+## Cấu trúc thư mục
 
-DTO = Data Transfer Object.
+```text
+NT106_SyncChain/
+├── app/
+│   └── SyncChain.Desktop/
+├── database/
+├── postman/
+├── .postman/
+├── src/
+├── SyncChain.API/
+├── ui/
+├── NT106_SyncChain.sln
+├── package.json
+├── package-lock.json
+├── index.json
+├── LICENSE
+└── README.md
+```
 
-Dùng để:
+### `SyncChain.API/`
 
-nhận dữ liệu từ client
-trả dữ liệu về client
-tránh expose trực tiếp model database
-DTOs/Admin/
-- ResetPasswordDTO.cs
+Backend chính của hệ thống, viết bằng ASP.NET Core Web API.
 
-Dữ liệu reset mật khẩu.
+- `Program.cs`: cấu hình service, SQLite, JWT, Swagger, phân quyền và seed dữ liệu ban đầu.
+- `Controllers/`: chứa các API controller như đăng nhập, sản phẩm, đơn hàng, báo cáo, admin.
+- `Services/`: chứa logic nghiệp vụ như xác thực, sản phẩm, đơn hàng.
+- `Models/`: định nghĩa entity ánh xạ với bảng database.
+- `DTOs/`: định nghĩa dữ liệu request/response cho API.
+- `Data/AppDbContext.cs`: DbContext của Entity Framework Core.
+- `Migrations/`: migration của Entity Framework Core.
+- `wwwroot/uploads/products/`: nơi lưu ảnh sản phẩm được upload.
+- `appsettings.json`: cấu hình logging và JWT.
+- `Properties/launchSettings.json`: cấu hình URL chạy local.
 
-Ví dụ:
+### `app/SyncChain.Desktop/`
 
-{
-  "newPassword": "123456"
-}
-UpdateInternalUserDTO.cs
+Ứng dụng giao diện desktop viết bằng .NET MAUI.
 
-Dữ liệu cập nhật người dùng nội bộ.
+- `App.xaml`, `AppShell.xaml`: cấu hình app và điều hướng chính.
+- `Views/Pages/`: các màn hình giao diện như đăng nhập, dashboard, sản phẩm, đơn hàng, nhập kho, quản trị người dùng.
+- `Services/SyncChainApiClient.cs`: client gọi API backend.
+- `Models/AppModels.cs`: model dùng cho giao diện.
+- `Converters/`: converter phục vụ binding trong XAML.
+- `Resources/`: font, ảnh, icon, splash screen, style và màu sắc.
+- `Platforms/`: cấu hình riêng cho từng nền tảng MAUI như Windows, Android, iOS, MacCatalyst.
 
-DTOs/Product/
-- CreateProductDTO.cs
+### `database/`
 
-Dữ liệu thêm sản phẩm mới.
+Chứa dữ liệu SQLite và script tạo bảng.
 
-- ImportStockDTO.cs
+- `SyncChain.db`: database chính của ứng dụng.
+- `SyncChain.db-wal`, `SyncChain.db-shm`: file phụ của SQLite khi dùng WAL mode.
+- `TaoBang.sql`: script tạo bảng ban đầu.
 
-Dữ liệu nhập kho.
+Không nên xóa `SyncChain.db` nếu muốn giữ dữ liệu hiện tại. Nếu cần reset dữ liệu, dừng API trước, sao lưu database, rồi tạo lại database mới.
 
-Ví dụ:
+### `postman/` và `.postman/`
 
-{
-  "productId": 1,
-  "quantity": 100
-}
-UpdateProductDTO.cs
+Chứa cấu hình dùng cho Postman để kiểm thử API. Có thể import collection/environment nếu cần gọi API thủ công.
 
-Dữ liệu cập nhật sản phẩm.
+### `src/`
 
-DTO khác
-- CreateInternalUserDTO.cs
+Chứa script Node.js thử nghiệm với SQLite, gồm các hàm mẫu về thêm sản phẩm và đặt hàng bằng transaction. Đây không phải backend chính của app desktop.
 
-Tạo tài khoản nhân viên/admin.
+Nếu muốn thử script Node.js:
 
-- CreateOrderDTO.cs
+```powershell
+npm install
+node src\index.js
+```
 
-Tạo đơn hàng mới.
+### `ui/`
 
-- LoginDTO.cs
+Thư mục dành cho tài nguyên hoặc thử nghiệm giao diện. Trong phiên bản hiện tại, app desktop chính nằm trong `app/SyncChain.Desktop`.
 
-Dữ liệu đăng nhập.
+### File ở thư mục gốc
 
-- OrderItemDTO.cs
+- `NT106_SyncChain.sln`: solution chính để mở toàn bộ dự án bằng Visual Studio.
+- `package.json`, `package-lock.json`: package Node.js phục vụ script thử nghiệm trong `src`.
+- `index.json`: file dữ liệu/cấu hình phụ của dự án.
+- `LICENSE`: giấy phép dự án.
+- `.gitignore`: danh sách file/thư mục không đưa vào Git.
 
-Thông tin từng sản phẩm trong đơn hàng.
+## Phân quyền
 
-- RegisterDTO.cs
+Hệ thống có 4 vai trò chính:
 
-Dữ liệu đăng ký tài khoản.
+- `customer`: tài khoản khách hàng, có thể xem sản phẩm và tạo đơn hàng.
+- `staff`: nhân viên, có thể quản lý/xử lý đơn hàng.
+- `manager`: quản lý, có thể quản lý sản phẩm và đơn hàng.
+- `admin`: quản trị viên, có toàn quyền, bao gồm quản lý tài khoản nội bộ.
 
-```Migrations/```
+## Một số API thường dùng
 
-Chứa migration của Entity Framework Core.
+Các endpoint có thể xem đầy đủ trong Swagger tại `http://localhost:5292/swagger`.
 
-Dùng để:
+- `POST /api/Auth/register`: đăng ký khách hàng.
+- `POST /api/Auth/login`: đăng nhập và nhận JWT.
+- `GET /api/Auth/profile`: xem hồ sơ người dùng đang đăng nhập.
+- `GET /api/Product`: lấy danh sách sản phẩm.
+- `POST /api/Product`: tạo sản phẩm mới.
+- `POST /api/Product/upload-image`: upload ảnh sản phẩm.
+- `GET /api/Order`: lấy danh sách đơn hàng của người dùng.
+- `POST /api/Order`: tạo đơn hàng.
+- `GET /api/Report/dashboard`: lấy dữ liệu dashboard.
+- `GET /api/admin/users`: lấy danh sách tài khoản nội bộ.
 
-tạo bảng
-cập nhật schema database
-- 20260428132426_AddTrangThaiToDonHang.cs
+Với các API yêu cầu đăng nhập, thêm header:
 
-Migration thêm trạng thái cho đơn hàng.
+```text
+Authorization: Bearer <token>
+```
 
-Ví dụ:
+## Ghi chú khi phát triển
 
-TrangThai
-- AppDbContextModelSnapshot.cs
+- API dùng SQLite với đường dẫn `../database/SyncChain.db` tính từ thư mục chạy của project API.
+- Ứng dụng desktop đang hard-code API base URL trong `app/SyncChain.Desktop/Services/SyncChainApiClient.cs`.
+- Ảnh sản phẩm upload được lưu trong `SyncChain.API/wwwroot/uploads/products`.
+- Nếu thay đổi schema database, nên cập nhật cả migration và cân nhắc dữ liệu cũ trong `database/SyncChain.db`.
+- Nếu chạy app desktop không kết nối được backend, kiểm tra API đã chạy ở `http://localhost:5292` chưa.
 
-Snapshot schema hiện tại của database.
+## Build kiểm tra
 
-EF Core dùng file này để so sánh thay đổi.
+Build API:
 
-```Models/```
+```powershell
+dotnet build SyncChain.API\SyncChain.API.csproj
+```
 
-Chứa entity/model ánh xạ với database.
+Build desktop:
 
-- ChiTietDonHang.cs
+```powershell
+dotnet build app\SyncChain.Desktop\SyncChain.Desktop.csproj
+```
 
-Model chi tiết đơn hàng.
+Build toàn solution:
 
-Quan hệ:
-
-đơn hàng
-sản phẩm
-số lượng
-- DonHang.cs
-
-Model đơn hàng.
-
-Thông tin:
-
-khách hàng
-ngày tạo
-trạng thái
-- GiaoDichKho.cs
-
-Lưu lịch sử nhập/xuất kho.
-
-- NguoiDung.cs
-
-Model người dùng.
-
-Thông tin:
-
-username
-password hash
-role
-- PhanQuyen.cs
-
-Model phân quyền người dùng.
-
-Ví dụ:
-
-Admin
-Staff
-Warehouse
-- SanPham.cs
-
-Model sản phẩm.
-
-Thông tin:
-
-tên sản phẩm
-giá
-số lượng tồn kho
-```Services/```
-
-Chứa business logic của hệ thống.
-
-Ví dụ:
-
-xử lý JWT
-xử lý nghiệp vụ đơn hàng
-validate dữ liệu
-tính toán báo cáo
-
-## Cách chạy 
-- build:
-```dotnet build app\SyncChain.Desktop\SyncChain.Desktop.csproj```
-- run: 
-```dotnet run --project app\SyncChain.Desktop\SyncChain.Desktop.csproj```
-- backend:
-```dotnet run --project SyncChain.API\SyncChain.API.csproj```
+```powershell
+dotnet build NT106_SyncChain.sln
+```

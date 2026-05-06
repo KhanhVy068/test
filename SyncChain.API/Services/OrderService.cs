@@ -13,11 +13,13 @@ public class OrderService
         _db = db;
     }
 
+    // Tạo đơn, trừ kho và ghi giao dịch xuất kho trong một transaction.
     public object CreateOrder(int userId, CreateOrderDTO dto)
     {
         if (dto.Items.Count == 0)
             throw new InvalidOperationException("Don hang phai co it nhat mot san pham");
 
+        // Gộp các dòng trùng sản phẩm để kiểm tra tồn kho chính xác.
         var requestedItems = dto.Items
             .GroupBy(x => x.MaSanPham)
             .Select(g => new
@@ -35,6 +37,7 @@ public class OrderService
             .Where(x => productIds.Contains(x.MaSanPham))
             .ToDictionary(x => x.MaSanPham);
 
+        // Kiểm tra sản phẩm tồn tại, còn bán và đủ số lượng.
         foreach (var item in requestedItems)
         {
             if (!products.TryGetValue(item.MaSanPham, out var product))
@@ -47,6 +50,7 @@ public class OrderService
                 throw new InvalidOperationException($"{product.TenSanPham} chi con {product.SoLuongTon} trong kho");
         }
 
+        // Dùng transaction để đơn hàng và tồn kho luôn cập nhật cùng nhau.
         using var transaction = _db.Database.BeginTransaction();
 
         decimal total = 0;
@@ -60,6 +64,7 @@ public class OrderService
         _db.DonHang.Add(order);
         _db.SaveChanges();
 
+        // Tạo chi tiết đơn hàng và ghi lịch sử xuất kho.
         foreach (var item in requestedItems)
         {
             var product = products[item.MaSanPham];

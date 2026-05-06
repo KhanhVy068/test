@@ -12,13 +12,23 @@ public partial class AppShell : Shell
 		ApplyRoleNavigation();
 	}
 
+	public void RefreshUserFooter()
+	{
+		ApplyRoleNavigation();
+	}
+
+	// Cập nhật menu và footer theo role người dùng hiện tại.
 	private void ApplyRoleNavigation()
 	{
 		var api = Services.SyncChainApiClient.Instance;
 		var role = api.CurrentUser?.Role ?? "guest";
-		RoleLabel.Text = $"{api.CurrentUser?.Email ?? "guest"} - {role.ToUpperInvariant()}";
+		var user = api.CurrentUser;
 
-		DashboardItem.IsVisible = api.IsInternalUser;
+		AvatarLabel.Text = user?.Initials ?? "ND";
+		DisplayNameLabel.Text = user?.DisplayName ?? "Người dùng";
+		FooterRoleLabel.Text = user?.RoleLabel ?? role.ToUpperInvariant();
+
+		DashboardItem.IsVisible = role is "admin" or "manager";
 		ProductsItem.IsVisible = true;
 		OrdersItem.IsVisible = true;
 		CreateOrderItem.IsVisible = role is "customer" or "staff" or "manager" or "admin";
@@ -26,5 +36,12 @@ public partial class AppShell : Shell
 		LogsItem.IsVisible = api.IsInternalUser;
 		ChatItem.IsVisible = api.IsInternalUser;
 		AccessItem.IsVisible = api.CanManageUsers;
+	}
+
+	// Mở trang cài đặt tài khoản khi bấm footer.
+	private void OnAccountFooterTapped(object? sender, TappedEventArgs e)
+	{
+		FlyoutIsPresented = false;
+		CurrentItem = AccountSettingsItem;
 	}
 }

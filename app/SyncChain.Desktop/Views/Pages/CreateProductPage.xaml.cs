@@ -16,11 +16,12 @@ public partial class CreateProductPage : ContentPage
 
 		if (!SyncChainApiClient.Instance.CanManageProducts)
 		{
-			await DisplayAlert("Khong co quyen", "Chi admin hoac manager duoc them san pham.", "OK");
+			await DisplayAlert("Không có quyền", "Chỉ admin hoặc manager được thêm sản phẩm.", "OK");
 			await Shell.Current.GoToAsync("..");
 		}
 	}
 
+	// Kiểm tra form, tải ảnh nếu cần và tạo sản phẩm mới.
 	private async void OnSaveClicked(object? sender, EventArgs e)
 	{
 		var name = NameEntry.Text?.Trim() ?? string.Empty;
@@ -29,19 +30,25 @@ public partial class CreateProductPage : ContentPage
 
 		if (string.IsNullOrWhiteSpace(name))
 		{
-			await DisplayAlert("San pham", "Vui long nhap ten san pham.", "OK");
+			await DisplayAlert("Sản phẩm", "Vui lòng nhập tên sản phẩm.", "OK");
 			return;
 		}
 
 		if (!decimal.TryParse(PriceEntry.Text, NumberStyles.Number, CultureInfo.InvariantCulture, out var price) || price < 0)
 		{
-			await DisplayAlert("San pham", "Gia ban khong hop le.", "OK");
+			await DisplayAlert("Sản phẩm", "Giá bán không hợp lệ.", "OK");
+			return;
+		}
+
+		if (!decimal.TryParse(ImportPriceEntry.Text, NumberStyles.Number, CultureInfo.InvariantCulture, out var importPrice) || importPrice < 0)
+		{
+			await DisplayAlert("Sản phẩm", "Giá nhập không hợp lệ.", "OK");
 			return;
 		}
 
 		if (!int.TryParse(StockEntry.Text, out var stockQuantity) || stockQuantity < 0)
 		{
-			await DisplayAlert("San pham", "Ton kho khong hop le.", "OK");
+			await DisplayAlert("Sản phẩm", "Tồn kho không hợp lệ.", "OK");
 			return;
 		}
 
@@ -54,13 +61,13 @@ public partial class CreateProductPage : ContentPage
 				imageUrl = await SyncChainApiClient.Instance.UploadProductImageAsync(imageUrl);
 			}
 
-			await SyncChainApiClient.Instance.CreateProductAsync(name, price, stockQuantity, imageUrl, description);
-			await DisplayAlert("San pham", "Them san pham thanh cong.", "OK");
+			await SyncChainApiClient.Instance.CreateProductAsync(name, price, importPrice, stockQuantity, imageUrl, description);
+			await DisplayAlert("Sản phẩm", "Thêm sản phẩm thành công.", "OK");
 			await Shell.Current.GoToAsync("..");
 		}
 		catch (Exception ex)
 		{
-			await DisplayAlert("Khong luu duoc san pham", ex.Message, "OK");
+			await DisplayAlert("Không lưu được sản phẩm", ex.Message, "OK");
 		}
 		finally
 		{
@@ -68,13 +75,14 @@ public partial class CreateProductPage : ContentPage
 		}
 	}
 
+	// Chọn ảnh từ máy và hiển thị xem trước.
 	private async void OnPickImageClicked(object? sender, EventArgs e)
 	{
 		try
 		{
 			var file = await FilePicker.Default.PickAsync(new PickOptions
 			{
-				PickerTitle = "Chon hinh anh san pham",
+				PickerTitle = "Chọn hình ảnh sản phẩm",
 				FileTypes = FilePickerFileType.Images
 			});
 
@@ -82,15 +90,18 @@ public partial class CreateProductPage : ContentPage
 				return;
 
 			ImageEntry.Text = file.FullPath ?? file.FileName;
-			PreviewImage.Source = CreateImageSource(ImageEntry.Text);
-			PreviewLabel.IsVisible = string.IsNullOrWhiteSpace(ImageEntry.Text);
+			var imageSource = CreateImageSource(ImageEntry.Text);
+			PreviewImage.Source = imageSource;
+			PreviewImage.IsVisible = imageSource != null;
+			PreviewLabel.IsVisible = imageSource == null;
 		}
 		catch (Exception ex)
 		{
-			await DisplayAlert("Khong chon duoc anh", ex.Message, "OK");
+			await DisplayAlert("Không chọn được ảnh", ex.Message, "OK");
 		}
 	}
 
+	// Tạo nguồn ảnh từ file cục bộ hoặc URL.
 	private static ImageSource? CreateImageSource(string imageUrl)
 	{
 		if (string.IsNullOrWhiteSpace(imageUrl))
@@ -104,6 +115,7 @@ public partial class CreateProductPage : ContentPage
 			: null;
 	}
 
+	// Quay lại trang trước.
 	private async void OnBackClicked(object? sender, EventArgs e)
 	{
 		await Shell.Current.GoToAsync("..");

@@ -2,6 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace SyncChain.API.Models;
 
+// Entity lưu lịch sử nhập/xuất kho của sản phẩm.
 public class GiaoDichKho
 {
     [Key]

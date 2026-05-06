@@ -5,6 +5,7 @@ namespace SyncChain.Desktop.Services;
 
 public static class DemoData
 {
+	// Dữ liệu mẫu cho các thẻ thống kê dashboard khi cần mock UI.
 	public static IReadOnlyList<StatCard> DashboardStats { get; } =
 	[
 		new() { Title = "Tổng sản phẩm", Value = "1,284", Subtitle = "+12% trong 7 ngày", Icon = "□", Accent = Color.FromArgb("#2563EB") },
@@ -14,6 +15,7 @@ public static class DemoData
 		new() { Title = "Nhập chờ duyệt", Value = "08", Subtitle = "Từ nhà máy", Icon = "↗", Accent = Color.FromArgb("#7C3AED") }
 	];
 
+	// Dữ liệu mẫu cho cảnh báo tồn kho thấp.
 	public static IReadOnlyList<AlertItem> LowStockAlerts { get; } =
 	[
 		new() { Name = "Đồng hồ thông minh S3", Code = "WTC-0012", StockText = "Còn 02 / hạn mức 10", Accent = Color.FromArgb("#DC2626") },
@@ -21,6 +23,7 @@ public static class DemoData
 		new() { Name = "Classic Gen 2", Code = "WTC-0045", StockText = "Còn 08 / hạn mức 15", Accent = Color.FromArgb("#F59E0B") }
 	];
 
+	// Dữ liệu mẫu cho hoạt động gần đây.
 	public static IReadOnlyList<ActivityItem> Activities { get; } =
 	[
 		new() { Title = "Đơn #ORD-5621 đã hoàn tất và gửi email xác nhận", Time = "5 phút trước", Icon = "✓", Accent = Color.FromArgb("#16A34A") },
@@ -29,6 +32,7 @@ public static class DemoData
 		new() { Title = "Đơn #ORD-5602 bị hủy do khách đổi phương thức thanh toán", Time = "4 giờ trước", Icon = "×", Accent = Color.FromArgb("#DC2626") }
 	];
 
+	// Dữ liệu mẫu mô tả các điểm tích hợp hệ thống.
 	public static IReadOnlyList<BridgeItem> Bridges { get; } =
 	[
 		new() { Title = "Realtime order tracking bridge", Description = "Sẵn điểm nối WebSocket/SignalR để đẩy trạng thái đóng gói, vận chuyển và xác nhận giao hàng.", Status = "Frontend ready", Accent = Color.FromArgb("#2563EB") },
@@ -36,6 +40,7 @@ public static class DemoData
 		new() { Title = "Registration and notification bridge", Description = "Form đăng ký, email xác thực, cảnh báo lỗi đơn và thông báo tức thời cho khách hàng.", Status = "Awaiting API", Accent = Color.FromArgb("#7C3AED") }
 	];
 
+	// Dữ liệu mẫu cho danh sách sản phẩm.
 	public static IReadOnlyList<ProductItem> Products { get; } =
 	[
 		new() { Code = "WTC-0012", Name = "Đồng hồ thông minh S3", Description = "Thiết bị theo dõi sức khỏe và thông báo thời gian thực.", Price = "890,000 đ", Stock = "02", BadgeText = "Đang bán", BadgeColor = Color.FromArgb("#16A34A"), Initials = "S3" },
@@ -46,6 +51,7 @@ public static class DemoData
 		new() { Code = "GLA-7712", Name = "Urban Shade", Description = "Kính mát thời trang đã tạm ngưng bán.", Price = "250,000 đ", Stock = "00", BadgeText = "Ngừng bán", BadgeColor = Color.FromArgb("#DC2626"), Initials = "US" }
 	];
 
+	// Dữ liệu mẫu cho lịch sử kho.
 	public static IReadOnlyList<InventoryEvent> InventoryEvents { get; } =
 	[
 		new() { Date = "14/10/2023", Type = "Xuất kho", Quantity = "-1", Actor = "Nguyễn Văn A", Note = "Đơn #ORD-8942", Accent = Color.FromArgb("#DC2626") },
@@ -53,6 +59,7 @@ public static class DemoData
 		new() { Date = "02/10/2023", Type = "Xuất kho", Quantity = "-3", Actor = "Hệ thống", Note = "Bán hàng online", Accent = Color.FromArgb("#DC2626") }
 	];
 
+	// Dữ liệu mẫu cho danh sách đơn hàng.
 	public static IReadOnlyList<OrderItem> Orders { get; } =
 	[
 		new() { Code = "#ORD-2023-8942", Customer = "Nguyễn Văn Lâm", Email = "lam.nv@gmail.com", CreatedAt = "14/10/2023 10:24", Total = "1,450,000 đ", Status = "Đã xử lý", StatusColor = Color.FromArgb("#2563EB"), Initials = "NL" },
@@ -62,6 +69,7 @@ public static class DemoData
 		new() { Code = "#ORD-2023-8935", Customer = "Quách Tĩnh", Email = "tinh.quach@gmail.com", CreatedAt = "13/10/2023 11:10", Total = "2,780,000 đ", Status = "Hoàn tất", StatusColor = Color.FromArgb("#16A34A"), Initials = "QT" }
 	];
 
+	// Dữ liệu mẫu cho dòng sản phẩm trong đơn hàng.
 	public static IReadOnlyList<LineItem> OrderLines { get; } =
 	[
 		new() { Name = "Đồng hồ thông minh S3", Variant = "Màu đen / Size M", Quantity = "x1", Price = "890,000 đ", Initials = "S3" },
@@ -69,6 +77,7 @@ public static class DemoData
 		new() { Name = "Dây sạc USB-C", Variant = "Dài 1 mét", Quantity = "x2", Price = "110,000 đ", Initials = "UC" }
 	];
 
+	// Dữ liệu mẫu cho timeline xử lý đơn.
 	public static IReadOnlyList<TimelineItem> Timeline { get; } =
 	[
 		new() { Title = "Đơn hàng đã được tạo và khóa tồn kho", Time = "14/10/2023 - 10:24", State = "done", Accent = Color.FromArgb("#16A34A") },
@@ -78,6 +87,7 @@ public static class DemoData
 		new() { Title = "Khách/đơn vị vận chuyển xác nhận đã nhận", Time = "Đang chờ", State = "waiting", Accent = Color.FromArgb("#CBD5E1") }
 	];
 
+	// Dữ liệu mẫu cho phiếu nhập hàng.
 	public static IReadOnlyList<ImportItem> Imports { get; } =
 	[
 		new() { Code = "#IMP-2023-0023", Supplier = "Công ty TNHH TechWorld", Date = "15/10/2023", ProductCount = "12 sản phẩm", Amount = "24,500,000 đ", Status = "Chờ duyệt", StatusColor = Color.FromArgb("#F59E0B") },
@@ -86,6 +96,7 @@ public static class DemoData
 		new() { Code = "#IMP-2023-0020", Supplier = "Smart Home Việt Nam", Date = "12/10/2023", ProductCount = "05 sản phẩm", Amount = "5,200,000 đ", Status = "Từ chối", StatusColor = Color.FromArgb("#DC2626") }
 	];
 
+	// Dữ liệu mẫu cho nhà cung cấp.
 	public static IReadOnlyList<SupplierItem> Suppliers { get; } =
 	[
 		new() { Name = "TechWorld", Orders = "48 phiếu nhập", Amount = "124,5tr", Initial = "T", Accent = Color.FromArgb("#2563EB") },
@@ -93,6 +104,7 @@ public static class DemoData
 		new() { Name = "Global Parts", Orders = "22 phiếu nhập", Amount = "76,8tr", Initial = "G", Accent = Color.FromArgb("#7C3AED") }
 	];
 
+	// Dữ liệu mẫu cho nhật ký hoạt động.
 	public static IReadOnlyList<LogItem> Logs { get; } =
 	[
 		new() { Title = "Hoàn tất đơn hàng #ORD-2023-8942", Description = "Nguyễn Văn A đã chuyển trạng thái đơn sang Đã xử lý.", Time = "5 phút trước", Tag = "Đơn hàng", Icon = "✓", Accent = Color.FromArgb("#16A34A") },
@@ -102,6 +114,7 @@ public static class DemoData
 		new() { Title = "Hủy đơn hàng #ORD-2023-8938", Description = "Đơn hàng bị hủy theo yêu cầu của khách hàng.", Time = "4 giờ trước", Tag = "Hủy đơn", Icon = "×", Accent = Color.FromArgb("#DC2626") }
 	];
 
+	// Dữ liệu mẫu cho danh sách hội thoại.
 	public static IReadOnlyList<ChatThread> Threads { get; } =
 	[
 		new() { Name = "Lê Minh Tuấn", Preview = "Đã xử lý đơn #8942", Time = "2m", Initials = "LM", IsActive = true },
@@ -109,6 +122,7 @@ public static class DemoData
 		new() { Name = "Quang Anh", Preview = "Check tồn kho giúp mình", Time = "1h", Initials = "QA", IsActive = false }
 	];
 
+	// Dữ liệu mẫu cho tin nhắn trong hội thoại.
 	public static IReadOnlyList<ChatMessage> Messages { get; } =
 	[
 		new() { Content = "Đơn hàng #8942 đã xử lý xong nhé.", Time = "10:24", IsOutgoing = false },
@@ -116,6 +130,7 @@ public static class DemoData
 		new() { Content = "Nhớ kiểm tra lại sản phẩm trước khi gửi.", Time = "10:26", IsOutgoing = false }
 	];
 
+	// Dữ liệu mẫu cho lựa chọn vai trò.
 	public static IReadOnlyList<RoleOption> Roles { get; } =
 	[
 		new() { Name = "Admin", Description = "Toàn quyền hệ thống, passkey bắt buộc.", IsSelected = true },
@@ -123,6 +138,7 @@ public static class DemoData
 		new() { Name = "Staff", Description = "Xử lý đơn, chat nội bộ, theo dõi vận chuyển.", IsSelected = false }
 	];
 
+	// Dữ liệu mẫu cho phương thức thanh toán.
 	public static IReadOnlyList<PaymentOption> Payments { get; } =
 	[
 		new() { Name = "Tiền mặt / COD", IsSelected = true },

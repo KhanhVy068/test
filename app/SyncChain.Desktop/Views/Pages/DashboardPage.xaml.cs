@@ -24,6 +24,7 @@ public partial class DashboardPage : ContentPage
 		await LoadDashboardAsync();
 	}
 
+	// Tải dữ liệu dashboard từ API và cập nhật các vùng thống kê.
 	private async Task LoadDashboardAsync()
 	{
 		try
@@ -39,21 +40,23 @@ public partial class DashboardPage : ContentPage
 			InventoryPercentLabel.Text = dashboard.InventoryPercent;
 			InventorySubtitleLabel.Text = dashboard.InventorySubtitle;
 			EmptyAlertsLabel.IsVisible = Alerts.Count == 0;
-			SubtitleLabel.Text = $"Cap nhat tu backend luc {DateTime.Now:HH:mm dd/MM/yyyy}.";
+			SubtitleLabel.Text = $"Cập nhật từ backend luc {DateTime.Now:HH:mm dd/MM/yyyy}.";
 		}
 		catch (Exception ex)
 		{
 			ClearAll();
-			SubtitleLabel.Text = "Khong tai duoc dashboard tu backend.";
-			await DisplayAlert("Dashboard", ex.Message, "OK");
+			SubtitleLabel.Text = "Không tải được dashboard từ backend.";
+			await DisplayAlert("Bảng điều khiển", ex.Message, "OK");
 		}
 	}
 
+	// Làm mới dashboard theo thao tác người dùng.
 	private async void OnRefreshClicked(object? sender, EventArgs e)
 	{
 		await LoadDashboardAsync();
 	}
 
+	// Xóa dữ liệu hiển thị khi không tải được dashboard.
 	private void ClearAll()
 	{
 		Stats.Clear();
@@ -63,9 +66,10 @@ public partial class DashboardPage : ContentPage
 		TopProducts.Clear();
 		EmptyAlertsLabel.IsVisible = true;
 		InventoryPercentLabel.Text = "0%";
-		InventorySubtitleLabel.Text = "Chua co du lieu";
+		InventorySubtitleLabel.Text = "Chưa có dữ liệu";
 	}
 
+	// Thay toàn bộ dữ liệu trong ObservableCollection để UI tự cập nhật.
 	private static void Replace<T>(ObservableCollection<T> target, IEnumerable<T> items)
 	{
 		target.Clear();

@@ -26,6 +26,7 @@ public partial class CreateOrderPage : ContentPage
 		await LoadProductsAsync();
 	}
 
+	// Tải các sản phẩm còn tồn kho để đưa vào đơn hàng.
 	private async Task LoadProductsAsync()
 	{
 		try
@@ -40,21 +41,22 @@ public partial class CreateOrderPage : ContentPage
 		}
 		catch (Exception ex)
 		{
-			await DisplayAlert("Khong tai duoc san pham", ex.Message, "OK");
+			await DisplayAlert("Không tải được sản phẩm", ex.Message, "OK");
 		}
 	}
 
+	// Thêm sản phẩm vào giỏ tạm và kiểm tra số lượng tồn.
 	private async void OnAddProductClicked(object? sender, EventArgs e)
 	{
 		if (ProductPicker.SelectedItem is not ProductItem product)
 		{
-			await DisplayAlert("Tao don hang", "Vui long chon san pham.", "OK");
+			await DisplayAlert("Tạo đơn hàng", "Vui lòng chọn sản phẩm.", "OK");
 			return;
 		}
 
 		if (!int.TryParse(QuantityEntry.Text, out var quantity) || quantity <= 0)
 		{
-			await DisplayAlert("Tao don hang", "So luong phai lon hon 0.", "OK");
+			await DisplayAlert("Tạo đơn hàng", "Số lượng phải lớn hơn 0.", "OK");
 			return;
 		}
 
@@ -63,7 +65,7 @@ public partial class CreateOrderPage : ContentPage
 
 		if (currentQuantity + quantity > product.StockQuantity)
 		{
-			await DisplayAlert("Tao don hang", $"San pham chi con {product.StockQuantity} trong kho.", "OK");
+			await DisplayAlert("Tạo đơn hàng", $"Sản phẩm chỉ còn {product.StockQuantity} trong kho.", "OK");
 			return;
 		}
 
@@ -80,6 +82,7 @@ public partial class CreateOrderPage : ContentPage
 		UpdateTotals();
 	}
 
+	// Giảm số lượng dòng hàng hoặc xóa dòng nếu còn 1.
 	private void OnDecreaseQuantityClicked(object? sender, EventArgs e)
 	{
 		if ((sender as Button)?.CommandParameter is not CreateOrderLine line)
@@ -97,6 +100,7 @@ public partial class CreateOrderPage : ContentPage
 		UpdateTotals();
 	}
 
+	// Tăng số lượng dòng hàng nhưng không vượt tồn kho.
 	private async void OnIncreaseQuantityClicked(object? sender, EventArgs e)
 	{
 		if ((sender as Button)?.CommandParameter is not CreateOrderLine line)
@@ -104,7 +108,7 @@ public partial class CreateOrderPage : ContentPage
 
 		if (line.Quantity >= line.StockQuantity)
 		{
-			await DisplayAlert("Tao don hang", $"San pham chi con {line.StockQuantity} trong kho.", "OK");
+			await DisplayAlert("Tạo đơn hàng", $"Sản phẩm chỉ còn {line.StockQuantity} trong kho.", "OK");
 			return;
 		}
 
@@ -112,6 +116,7 @@ public partial class CreateOrderPage : ContentPage
 		UpdateTotals();
 	}
 
+	// Xóa một dòng sản phẩm khỏi đơn tạm.
 	private void OnRemoveLineClicked(object? sender, EventArgs e)
 	{
 		if ((sender as Button)?.CommandParameter is CreateOrderLine line)
@@ -121,6 +126,7 @@ public partial class CreateOrderPage : ContentPage
 		}
 	}
 
+	// Làm sạch form tạo đơn hàng.
 	private void OnResetClicked(object? sender, EventArgs e)
 	{
 		ProductPicker.SelectedItem = null;
@@ -129,11 +135,12 @@ public partial class CreateOrderPage : ContentPage
 		UpdateTotals();
 	}
 
+	// Gửi đơn hàng mới lên API và quay về danh sách đơn.
 	private async void OnCreateOrderClicked(object? sender, EventArgs e)
 	{
 		if (Lines.Count == 0)
 		{
-			await DisplayAlert("Tao don hang", "Vui long them it nhat mot san pham.", "OK");
+			await DisplayAlert("Tạo đơn hàng", "Vui lòng thêm ít nhất một sản phẩm.", "OK");
 			return;
 		}
 
@@ -147,14 +154,14 @@ public partial class CreateOrderPage : ContentPage
 				SoLuong = x.Quantity
 			}));
 
-			await DisplayAlert("Tao don hang", $"Tao don #{result.MaDonHang} thanh cong. Tong tien: {FormatMoney(result.TongTien)}", "OK");
+			await DisplayAlert("Tạo đơn hàng", $"Tạo đơn #{result.MaDonHang} thành công. Tổng tiền: {FormatMoney(result.TongTien)}", "OK");
 			Lines.Clear();
 			UpdateTotals();
 			await Shell.Current.GoToAsync("//orders");
 		}
 		catch (Exception ex)
 		{
-			await DisplayAlert("Khong tao duoc don hang", ex.Message, "OK");
+			await DisplayAlert("Không tạo được đơn hàng", ex.Message, "OK");
 		}
 		finally
 		{
@@ -162,11 +169,13 @@ public partial class CreateOrderPage : ContentPage
 		}
 	}
 
+	// Quay lại danh sách đơn hàng.
 	private async void OnBackClicked(object? sender, EventArgs e)
 	{
 		await Shell.Current.GoToAsync("//orders");
 	}
 
+	// Tính lại tạm tính, tổng tiền và trạng thái nút tạo đơn.
 	private void UpdateTotals()
 	{
 		var subtotal = Lines.Sum(x => x.LineTotal);
@@ -175,6 +184,7 @@ public partial class CreateOrderPage : ContentPage
 		CreateOrderButton.IsEnabled = Lines.Count > 0;
 	}
 
+	// Định dạng tiền hiển thị theo VND.
 	private static string FormatMoney(decimal value)
 	{
 		return value.ToString("N0", CultureInfo.InvariantCulture) + " VND";
@@ -185,6 +195,7 @@ public sealed class CreateOrderLine : INotifyPropertyChanged
 {
 	private int _quantity;
 
+	// Lưu thông tin một dòng sản phẩm trong đơn tạm.
 	public CreateOrderLine(ProductItem product, int quantity)
 	{
 		ProductId = product.Id;
@@ -202,7 +213,7 @@ public sealed class CreateOrderLine : INotifyPropertyChanged
 	public string Initials { get; }
 	public decimal UnitPrice { get; }
 	public int StockQuantity { get; }
-	public string Variant => $"Ton kho: {StockQuantity}";
+	public string Variant => $"Tồn kho: {StockQuantity}";
 	public string Price => UnitPrice.ToString("N0", CultureInfo.InvariantCulture) + " VND";
 	public decimal LineTotal => UnitPrice * Quantity;
 	public string LineTotalText => LineTotal.ToString("N0", CultureInfo.InvariantCulture) + " VND";
@@ -224,6 +235,7 @@ public sealed class CreateOrderLine : INotifyPropertyChanged
 
 	private void OnPropertyChanged([CallerMemberName] string? propertyName = null)
 	{
+		// Báo cho UI cập nhật lại binding khi dữ liệu dòng hàng đổi.
 		PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 	}
 }

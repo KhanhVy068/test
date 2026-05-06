@@ -6,12 +6,12 @@
     <ScrollView Background="{StaticResource AppPageBackgroundBrush}">
         <VerticalStackLayout Padding="30" Spacing="24">
             <Grid ColumnDefinitions="Auto,*,Auto,Auto" ColumnSpacing="12">
-                <Button Text="Quay lai danh sach" Style="{StaticResource SecondaryButtonStyle}" Clicked="OnBackClicked" />
+                <Button Text="Quay lại danh sách" Style="{StaticResource SecondaryButtonStyle}" Clicked="OnBackClicked" />
                 <VerticalStackLayout Grid.Column="1">
-                    <Label x:Name="OrderTitleLabel" Text="DON HANG" Style="{StaticResource PageTitleLabel}" />
-                    <Label x:Name="OrderSubtitleLabel" Text="Dang tai chi tiet don hang..." Style="{StaticResource CaptionLabel}" />
+                    <Label x:Name="OrderTitleLabel" Text="ĐƠN HÀNG" Style="{StaticResource PageTitleLabel}" />
+                    <Label x:Name="OrderSubtitleLabel" Text="Đang tải chi tiết đơn hàng..." Style="{StaticResource CaptionLabel}" />
                 </VerticalStackLayout>
-                <Picker x:Name="StatusPicker" Grid.Column="2" Title="Trang thai" WidthRequest="160" IsVisible="False">
+                <Picker x:Name="StatusPicker" Grid.Column="2" Title="Trạng thái" WidthRequest="160" IsVisible="False">
                     <Picker.Items>
                         <x:String>pending</x:String>
                         <x:String>processing</x:String>
@@ -21,7 +21,7 @@
                 </Picker>
                 <Button x:Name="UpdateStatusButton"
                         Grid.Column="3"
-                        Text="Cap nhat"
+                        Text="Cập nhật"
                         Style="{StaticResource PrimaryButtonStyle}"
                         Clicked="OnUpdateStatusClicked"
                         IsVisible="False" />
@@ -32,8 +32,8 @@
                     <Border Style="{StaticResource CardBorderStyle}">
                         <VerticalStackLayout Spacing="12">
                             <Grid ColumnDefinitions="*,Auto">
-                                <Label Text="San pham trong don" Style="{StaticResource SectionTitleLabel}" />
-                                <Label x:Name="LineCountLabel" Grid.Column="1" Text="0 san pham" Style="{StaticResource CaptionLabel}" />
+                                <Label Text="Sản phẩm trong đơn" Style="{StaticResource SectionTitleLabel}" />
+                                <Label x:Name="LineCountLabel" Grid.Column="1" Text="0 sản phẩm" Style="{StaticResource CaptionLabel}" />
                             </Grid>
 
                             <VerticalStackLayout BindableLayout.ItemsSource="{Binding Lines}" Spacing="12">
@@ -57,11 +57,11 @@
                                                 <Label Grid.Column="2" Text="{Binding Quantity}" VerticalTextAlignment="Center" />
                                                 <VerticalStackLayout Grid.Column="3" VerticalOptions="Center">
                                                     <Label Text="{Binding UnitPrice}" FontAttributes="Bold" HorizontalTextAlignment="End" />
-                                                    <Label Text="Don gia" Style="{StaticResource CaptionLabel}" HorizontalTextAlignment="End" />
+                                                    <Label Text="Đơn giá" Style="{StaticResource CaptionLabel}" HorizontalTextAlignment="End" />
                                                 </VerticalStackLayout>
                                                 <VerticalStackLayout Grid.Column="4" VerticalOptions="Center">
                                                     <Label Text="{Binding LineTotal}" FontAttributes="Bold" HorizontalTextAlignment="End" />
-                                                    <Label Text="Thanh tien" Style="{StaticResource CaptionLabel}" HorizontalTextAlignment="End" />
+                                                    <Label Text="Thành tiền" Style="{StaticResource CaptionLabel}" HorizontalTextAlignment="End" />
                                                 </VerticalStackLayout>
                                             </Grid>
                                         </Border>
@@ -69,7 +69,7 @@
                                 </BindableLayout.ItemTemplate>
                             </VerticalStackLayout>
 
-                            <Label x:Name="EmptyLinesLabel" Text="Don hang chua co chi tiet." Style="{StaticResource CaptionLabel}" HorizontalOptions="Center" IsVisible="False" />
+                            <Label x:Name="EmptyLinesLabel" Text="Đơn hàng chưa có chi tiết." Style="{StaticResource CaptionLabel}" HorizontalOptions="Center" IsVisible="False" />
                         </VerticalStackLayout>
                     </Border>
                 </VerticalStackLayout>
@@ -77,7 +77,7 @@
                 <VerticalStackLayout Grid.Column="1" Spacing="18">
                     <Border Style="{StaticResource CardBorderStyle}">
                         <VerticalStackLayout Spacing="10">
-                            <Label Text="Trang thai" Style="{StaticResource SectionTitleLabel}" />
+                            <Label Text="Trạng thái" Style="{StaticResource SectionTitleLabel}" />
                             <Border x:Name="StatusBadge" BackgroundColor="Orange" StrokeThickness="0" Padding="10,4" HorizontalOptions="Start">
                                 <Border.StrokeShape>
                                     <RoundRectangle CornerRadius="999" />
@@ -85,11 +85,11 @@
                                 <Label x:Name="StatusLabel" Text="pending" TextColor="White" />
                             </Border>
                             <Grid ColumnDefinitions="*,Auto">
-                                <Label Text="Ma don" Style="{StaticResource CaptionLabel}" />
+                                <Label Text="Mã đơn" Style="{StaticResource CaptionLabel}" />
                                 <Label x:Name="OrderCodeLabel" Grid.Column="1" Text="-" FontAttributes="Bold" />
                             </Grid>
                             <Grid ColumnDefinitions="*,Auto">
-                                <Label Text="Tong tien" Style="{StaticResource CaptionLabel}" />
+                                <Label Text="Tổng tiền" Style="{StaticResource CaptionLabel}" />
                                 <Label x:Name="TotalLabel" Grid.Column="1" Text="0 VND" FontAttributes="Bold" />
                             </Grid>
                         </VerticalStackLayout>
@@ -97,8 +97,8 @@
 
                     <Border Style="{StaticResource CardBorderStyle}">
                         <VerticalStackLayout Spacing="10">
-                            <Label Text="Ghi chu" Style="{StaticResource SectionTitleLabel}" />
-                            <Label Text="Backend hien luu san pham, so luong, don gia va trang thai. Ghi chu giao hang co the bo sung sau." Style="{StaticResource CaptionLabel}" FontSize="13" />
+                            <Label Text="Ghi chú" Style="{StaticResource SectionTitleLabel}" />
+                            <Label Text="Ghi chú giao hàng." Style="{StaticResource CaptionLabel}" FontSize="13" />
                         </VerticalStackLayout>
                     </Border>
                 </VerticalStackLayout>

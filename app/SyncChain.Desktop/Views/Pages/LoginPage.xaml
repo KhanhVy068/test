@@ -92,7 +92,7 @@
                                          VerticalOptions="Center"
                                          HorizontalOptions="Center"
                                          Spacing="18">
-                        <Label Text="TVT Logistic"
+                        <Label Text="TVT "
                                TextColor="White"
                                FontSize="40"
                                FontAttributes="Bold"
@@ -103,7 +103,7 @@
                                  Color="White"
                                  HorizontalOptions="Center" />
 
-                        <Label Text="Architectural logistics management for high-precision supply chain operations."
+                        <Label Text="Quản lý chuỗi cửa hàng thông minh"
                                TextColor="#D7E6FF"
                                FontSize="16"
                                MaximumWidthRequest="360"
@@ -123,11 +123,11 @@
                                              HorizontalOptions="Center"
                                              VerticalOptions="Center"
                                              MaximumWidthRequest="420">
-                            <Label Text="Login" Style="{StaticResource PageTitleLabel}" />
-                            <Label Text="AUTHENTICATION PROTOCOL REQUIRED" Style="{StaticResource CaptionLabel}" />
+                            <Label Text="Đăng nhập" Style="{StaticResource PageTitleLabel}" />
+                            <Label Text="YÊU CẦU XÁC THỰC" Style="{StaticResource CaptionLabel}" />
 
                             <VerticalStackLayout Spacing="8">
-                                <Label Text="USERNAME" Style="{StaticResource CaptionLabel}" />
+                                <Label Text="TÊN ĐĂNG NHẬP" Style="{StaticResource CaptionLabel}" />
                                 <Border BackgroundColor="White"
                                         Stroke="{StaticResource BorderColor}"
                                         StrokeThickness="1"
@@ -143,7 +143,7 @@
                                                TextColor="{StaticResource MutedColor}" />
                                         <Entry Grid.Column="1"
                                                x:Name="EmailEntry"
-                                               Placeholder="enterprise_id"
+                                               Placeholder="example@gmail.com"
                                                Keyboard="Email"
                                                BackgroundColor="Transparent" />
                                     </Grid>
@@ -151,7 +151,7 @@
                             </VerticalStackLayout>
 
                             <VerticalStackLayout Spacing="8">
-                                <Label Text="PASSWORD" Style="{StaticResource CaptionLabel}" />
+                                <Label Text="MẬT KHẨU" Style="{StaticResource CaptionLabel}" />
                                 <Border BackgroundColor="White"
                                         Stroke="{StaticResource BorderColor}"
                                         StrokeThickness="1"
@@ -177,23 +177,23 @@
                             <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="10">
                                 <CheckBox IsChecked="True" />
                                 <Label Grid.Column="1"
-                                       Text="Remember Me"
+                                       Text="Ghi nhớ đăng nhập"
                                        VerticalTextAlignment="Center" />
                                 <Label Grid.Column="2"
-                                       Text="Forgot Password?"
+                                       Text="Quên mật khẩu?"
                                        TextColor="{StaticResource PrimaryColor}"
                                        VerticalTextAlignment="Center"
                                        HorizontalTextAlignment="End" />
                             </Grid>
 
                             <Button x:Name="LoginButton"
-                                    Text="ACCESS DASHBOARD"
+                                    Text="ĐĂNG NHẬP"
                                     Style="{StaticResource PrimaryButtonStyle}"
                                     Clicked="OnLoginClicked" />
 
                             <HorizontalStackLayout HorizontalOptions="Center" Spacing="6">
-                                <Label Text="Don't have an account?" />
-                                <Label Text="Sign Up"
+                                <Label Text="Chưa có tài khoản?" />
+                                <Label Text="Đăng ký"
                                        TextColor="{StaticResource PrimaryColor}"
                                        FontAttributes="Bold">
                                     <Label.GestureRecognizers>
@@ -202,7 +202,7 @@
                                 </Label>
                             </HorizontalStackLayout>
 
-                            <Label Text="2026 - TVT Logistic"
+                            <Label Text="2026 - TVT"
                                    HorizontalOptions="Center"
                                    Style="{StaticResource CaptionLabel}"
                                    Margin="0,8,0,0" />

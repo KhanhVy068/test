@@ -9,6 +9,7 @@ public partial class LoginPage : ContentPage
 		InitializeComponent();
 	}
 
+	// Kiểm tra thông tin đăng nhập rồi chuyển vào Shell chính.
 	private async void OnLoginClicked(object? sender, EventArgs e)
 	{
 		var email = EmailEntry.Text?.Trim() ?? string.Empty;
@@ -16,7 +17,7 @@ public partial class LoginPage : ContentPage
 
 		if (string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(password))
 		{
-			await DisplayAlert("Dang nhap", "Vui long nhap email va mat khau.", "OK");
+			await DisplayAlert("Đăng nhập", "Vui lòng nhập email và mật khẩu.", "OK");
 			return;
 		}
 
@@ -29,7 +30,7 @@ public partial class LoginPage : ContentPage
 		}
 		catch (Exception ex)
 		{
-			await DisplayAlert("Khong the dang nhap", ex.Message, "OK");
+			await DisplayAlert("Không thể đăng nhập", ex.Message, "OK");
 		}
 		finally
 		{
@@ -37,6 +38,7 @@ public partial class LoginPage : ContentPage
 		}
 	}
 
+	// Mở màn hình đăng ký tài khoản mới.
 	private async void OnRegisterClicked(object? sender, EventArgs e)
 	{
 		await Navigation.PushAsync(new RegisterPage());

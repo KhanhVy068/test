@@ -36,7 +36,7 @@ public sealed class DashboardSnapshot
 	public IReadOnlyList<OrderTrendItem> OrderTrend { get; init; } = Array.Empty<OrderTrendItem>();
 	public IReadOnlyList<TopProductItem> TopProducts { get; init; } = Array.Empty<TopProductItem>();
 	public string InventoryPercent { get; init; } = "0%";
-	public string InventorySubtitle { get; init; } = "Chua co du lieu";
+	public string InventorySubtitle { get; init; } = "Chưa có dữ liệu";
 }
 
 public sealed class OrderTrendItem
@@ -77,15 +77,21 @@ public sealed class ProductItem
 	public decimal UnitPrice { get; init; }
 	public int StockQuantity { get; init; }
 	public string ImageUrl { get; init; } = string.Empty;
-	public bool HasImage => !string.IsNullOrWhiteSpace(ImageUrl);
+	// Kiểm tra sản phẩm có ảnh để quyết định hiển thị ảnh hay chữ viết tắt.
+	public bool HasImage => DisplayImageSource != null;
 	public bool ShowInitials => !HasImage;
-	public ImageSource? DisplayImageSource => CreateImageSource(ImageUrl);
+	
+	private ImageSource? _displayImageSource;
+	// Tạo ImageSource một lần từ URL hoặc file ảnh.
+    public ImageSource? DisplayImageSource =>
+    _displayImageSource ??= CreateImageSource(ImageUrl);
 	public string Price { get; init; } = string.Empty;
 	public string Stock { get; init; } = string.Empty;
 	public string BadgeText { get; init; } = string.Empty;
 	public Color BadgeColor { get; init; } = Colors.Transparent;
 	public string Initials { get; init; } = string.Empty;
 
+	// Chuyển đường dẫn ảnh thành nguồn ảnh MAUI.
 	private static ImageSource? CreateImageSource(string imageUrl)
 {
 	if (string.IsNullOrWhiteSpace(imageUrl))
@@ -93,7 +99,7 @@ public sealed class ProductItem
 
 	try
 	{
-		// File local
+		// FILE LOCAL
 		if (File.Exists(imageUrl))
 		{
 			return ImageSource.FromStream(() =>
@@ -102,7 +108,13 @@ public sealed class ProductItem
 			});
 		}
 
-		// URL hoặc file URI
+		// URL TU BACKEND
+		if (imageUrl.StartsWith("/"))
+		{
+			imageUrl = $"http://localhost:5292{imageUrl}";
+		}
+
+		// URL HTTP/HTTPS
 		if (Uri.TryCreate(imageUrl, UriKind.Absolute, out var uri))
 		{
 			// file://
@@ -200,6 +212,8 @@ public sealed class LineItem
 
 public sealed class ImportItem
 {
+	public int Id { get; init; }
+	public int ProductId { get; init; }
 	public string Code { get; init; } = string.Empty;
 	public string Supplier { get; init; } = string.Empty;
 	public string Date { get; init; } = string.Empty;
@@ -207,6 +221,8 @@ public sealed class ImportItem
 	public string Amount { get; init; } = string.Empty;
 	public string Status { get; init; } = string.Empty;
 	public Color StatusColor { get; init; } = Colors.Transparent;
+	public string Note { get; init; } = string.Empty;
+	public string Actor { get; init; } = string.Empty;
 }
 
 public sealed class SupplierItem
@@ -259,15 +275,18 @@ public sealed class InternalUserItem
 	public string Role { get; init; } = string.Empty;
 	public bool IsActive { get; init; }
 	public string Code => $"ND-{Id:0000}";
+	// Đổi role kỹ thuật thành nhãn hiển thị.
 	public string RoleLabel => Role switch
 	{
 		"manager" => "Manager",
 		"staff" => "Staff",
 		_ => Role
 	};
-	public string StatusText => IsActive ? "Dang hoat dong" : "Da khoa";
+	// Tạo trạng thái hiển thị của tài khoản nội bộ.
+	public string StatusText => IsActive ? "Đang hoạt động" : "Đã khóa";
 	public Color StatusColor => IsActive ? Colors.SeaGreen : Colors.Firebrick;
-	public string ToggleText => IsActive ? "Khoa" : "Mo khoa";
+	// Đổi nhãn nút theo trạng thái khóa/mở.
+	public string ToggleText => IsActive ? "Khóa" : "Mở khóa";
 }
 
 public sealed class PaymentOption

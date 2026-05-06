@@ -26,6 +26,7 @@ public partial class ProductsPage : ContentPage
 		await LoadProductsAsync();
 	}
 
+	// Tải danh sách sản phẩm từ API và cập nhật giao diện.
 	private async Task LoadProductsAsync()
 	{
 		try
@@ -41,20 +42,22 @@ public partial class ProductsPage : ContentPage
 			Products.Clear();
 			_allProducts.Clear();
 			UpdateSummary();
-			await DisplayAlert("Khong tai duoc san pham", ex.Message, "OK");
+			await DisplayAlert("Không tải được sản phẩm", ex.Message, "OK");
 		}
 	}
 
+	// Bật/tắt các nút quản lý theo quyền người dùng.
 	private void ApplyPermissions()
 	{
 		var canManage = SyncChainApiClient.Instance.CanManageProducts;
 		OnPropertyChanged(nameof(CanManageProducts));
 		ShowCreateFormButton.IsVisible = canManage;
 		PermissionLabel.Text = canManage
-			? "Ban co quyen them/sua/xoa san pham"
-			: "Chi admin hoac manager duoc them/sua/xoa";
+			? "Bạn có quyền thêm/sửa/xóa sản phẩm"
+			: "Chỉ admin hoặc manager được thêm/sửa/xóa";
 	}
 
+	// Lọc sản phẩm theo từ khóa tìm kiếm.
 	private void ApplyFilter()
 	{
 		var keyword = SearchEntry.Text?.Trim() ?? string.Empty;
@@ -74,6 +77,7 @@ public partial class ProductsPage : ContentPage
 		EmptyLabel.IsVisible = Products.Count == 0;
 	}
 
+	// Tính các số liệu tổng quan ở đầu trang.
 	private void UpdateSummary()
 	{
 		TotalProductsLabel.Text = _allProducts.Count.ToString(CultureInfo.InvariantCulture);
@@ -83,16 +87,19 @@ public partial class ProductsPage : ContentPage
 		EmptyLabel.IsVisible = Products.Count == 0;
 	}
 
+	// Cập nhật bộ lọc khi người dùng nhập tìm kiếm.
 	private void OnSearchTextChanged(object? sender, TextChangedEventArgs e)
 	{
 		ApplyFilter();
 	}
 
+	// Tải lại danh sách sản phẩm thủ công.
 	private async void OnRefreshClicked(object? sender, EventArgs e)
 	{
 		await LoadProductsAsync();
 	}
 
+	// Mở màn hình tạo sản phẩm nếu đủ quyền.
 	private async void OnShowCreateFormClicked(object? sender, EventArgs e)
 	{
 		if (!EnsureCanManageProducts())
@@ -101,6 +108,7 @@ public partial class ProductsPage : ContentPage
 		await Shell.Current.GoToAsync(nameof(CreateProductPage));
 	}
 
+	// Mở trang chi tiết ở chế độ chỉnh sửa sản phẩm.
 	private async void OnEditProductClicked(object? sender, EventArgs e)
 	{
 		if (!EnsureCanManageProducts())
@@ -112,6 +120,7 @@ public partial class ProductsPage : ContentPage
 		await Shell.Current.GoToAsync($"{nameof(ProductDetailPage)}?productId={product.Id}");
 	}
 
+	// Xác nhận và xóa sản phẩm đã chọn.
 	private async void OnDeleteProductClicked(object? sender, EventArgs e)
 	{
 		if (!EnsureCanManageProducts())
@@ -120,7 +129,7 @@ public partial class ProductsPage : ContentPage
 		if ((sender as Button)?.CommandParameter is not ProductItem product)
 			return;
 
-		var confirmed = await DisplayAlert("Xoa san pham", $"Xoa {product.Name}?", "Xoa", "Huy");
+		var confirmed = await DisplayAlert("Xóa sản phẩm", $"Xóa {product.Name}?", "Xóa", "Hủy");
 		if (!confirmed)
 			return;
 
@@ -128,14 +137,15 @@ public partial class ProductsPage : ContentPage
 		{
 			await SyncChainApiClient.Instance.DeleteProductAsync(product.Id);
 			await LoadProductsAsync();
-			await DisplayAlert("Xoa san pham", "Da xoa san pham.", "OK");
+			await DisplayAlert("Xóa sản phẩm", "Đã xóa sản phẩm.", "OK");
 		}
 		catch (Exception ex)
 		{
-			await DisplayAlert("Khong xoa duoc san pham", ex.Message, "OK");
+			await DisplayAlert("Không xóa được sản phẩm", ex.Message, "OK");
 		}
 	}
 
+	// Mở trang chi tiết sản phẩm.
 	private async void OnOpenDetailClicked(object? sender, EventArgs e)
 	{
 		if ((sender as Button)?.CommandParameter is not ProductItem product)
@@ -144,12 +154,13 @@ public partial class ProductsPage : ContentPage
 		await Shell.Current.GoToAsync($"{nameof(ProductDetailPage)}?productId={product.Id}");
 	}
 
+	// Chặn thao tác quản lý khi người dùng không đủ quyền.
 	private bool EnsureCanManageProducts()
 	{
 		if (SyncChainApiClient.Instance.CanManageProducts)
 			return true;
 
-		DisplayAlert("Khong co quyen", "Chi admin hoac manager duoc quan ly san pham.", "OK");
+		DisplayAlert("Không có quyền", "Chỉ admin hoặc manager được quản lý sản phẩm.", "OK");
 		return false;
 	}
 

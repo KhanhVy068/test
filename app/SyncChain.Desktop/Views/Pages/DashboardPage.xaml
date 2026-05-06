@@ -7,10 +7,10 @@
         <VerticalStackLayout Padding="30" Spacing="24">
             <Grid ColumnDefinitions="*,Auto" ColumnSpacing="16">
                 <VerticalStackLayout>
-                    <Label Text="DASHBOARD ADMIN" Style="{StaticResource PageTitleLabel}" />
-                    <Label x:Name="SubtitleLabel" Text="Thong ke don hang, doanh thu va san pham ban chay tu backend." Style="{StaticResource CaptionLabel}" FontSize="14" />
+                    <Label Text="TỔNG QUAN" Style="{StaticResource PageTitleLabel}" />
+                    <Label x:Name="SubtitleLabel" Text="Thống kê đơn hàng, doanh thu và sản phẩm bán." Style="{StaticResource CaptionLabel}" FontSize="14" />
                 </VerticalStackLayout>
-                <Button Grid.Column="1" Text="Lam moi" Style="{StaticResource PrimaryButtonStyle}" Clicked="OnRefreshClicked" />
+                <Button Grid.Column="1" Text="Làm mới" Style="{StaticResource PrimaryButtonStyle}" Clicked="OnRefreshClicked" />
             </Grid>
 
             <FlexLayout Wrap="Wrap" Direction="Row" BindableLayout.ItemsSource="{Binding Stats}">
@@ -36,12 +36,12 @@
             <Grid ColumnDefinitions="1.15*,0.85*" ColumnSpacing="18">
                 <Border Style="{StaticResource CardBorderStyle}">
                     <VerticalStackLayout Spacing="16">
-                        <Label Text="Xu huong don hang 7 ngay" Style="{StaticResource SectionTitleLabel}" />
+                        <Label Text="Xu hướng đơn hàng 7 ngày" Style="{StaticResource SectionTitleLabel}" />
                         <Grid ColumnDefinitions="*,*,*,*,*" Padding="0,0,0,8">
                             <Label Text="Ngay" Style="{StaticResource CaptionLabel}" />
-                            <Label Grid.Column="1" Text="Tong don" Style="{StaticResource CaptionLabel}" />
-                            <Label Grid.Column="2" Text="Hoan thanh" Style="{StaticResource CaptionLabel}" />
-                            <Label Grid.Column="3" Text="Dang xu ly" Style="{StaticResource CaptionLabel}" />
+                            <Label Grid.Column="1" Text="Tổng đơn" Style="{StaticResource CaptionLabel}" />
+                            <Label Grid.Column="2" Text="Hoàn thành" Style="{StaticResource CaptionLabel}" />
+                            <Label Grid.Column="3" Text="Đang xử lý" Style="{StaticResource CaptionLabel}" />
                             <Label Grid.Column="4" Text="Doanh thu" Style="{StaticResource CaptionLabel}" HorizontalTextAlignment="End" />
                         </Grid>
                         <VerticalStackLayout BindableLayout.ItemsSource="{Binding OrderTrend}" Spacing="10">
@@ -70,7 +70,7 @@
                         <RoundRectangle CornerRadius="22" />
                     </Border.StrokeShape>
                     <VerticalStackLayout Spacing="16">
-                        <Label Text="Phan bo san pham" TextColor="White" FontSize="17" FontAttributes="Bold" />
+                        <Label Text="Phân bổ sản phẩm" TextColor="White" FontSize="17" FontAttributes="Bold" />
                         <Label x:Name="InventorySubtitleLabel" Text="-" TextColor="#B7CDF8" FontSize="13" />
                         <Grid HorizontalOptions="Center" Margin="0,18,0,6">
                             <Border BackgroundColor="White" StrokeThickness="0" WidthRequest="140" HeightRequest="140">
@@ -84,12 +84,12 @@
                                 </Border.StrokeShape>
                                 <VerticalStackLayout VerticalOptions="Center" HorizontalOptions="Center" Spacing="2">
                                     <Label x:Name="InventoryPercentLabel" Text="0%" TextColor="White" FontSize="24" FontAttributes="Bold" HorizontalTextAlignment="Center" />
-                                    <Label Text="DANG BAN" TextColor="#C8D9FF" FontSize="10" FontAttributes="Bold" HorizontalTextAlignment="Center" />
+                                    <Label Text="ĐANG BÁN" TextColor="#C8D9FF" FontSize="10" FontAttributes="Bold" HorizontalTextAlignment="Center" />
                                 </VerticalStackLayout>
                             </Border>
                         </Grid>
 
-                        <Label Text="San pham ban chay" TextColor="White" FontSize="15" FontAttributes="Bold" />
+                        <Label Text="Sản phẩm bán chạy" TextColor="White" FontSize="15" FontAttributes="Bold" />
                         <VerticalStackLayout BindableLayout.ItemsSource="{Binding TopProducts}" Spacing="10">
                             <BindableLayout.ItemTemplate>
                                 <DataTemplate>
@@ -109,7 +109,7 @@
             <Grid ColumnDefinitions="*,*" ColumnSpacing="18">
                 <Border Style="{StaticResource CardBorderStyle}">
                     <VerticalStackLayout Spacing="14">
-                        <Label Text="Canh bao ton kho thap" Style="{StaticResource SectionTitleLabel}" />
+                        <Label Text="Cảnh báo tồn kho thấp" Style="{StaticResource SectionTitleLabel}" />
                         <VerticalStackLayout BindableLayout.ItemsSource="{Binding Alerts}" Spacing="12">
                             <BindableLayout.ItemTemplate>
                                 <DataTemplate>
@@ -134,13 +134,13 @@
                                 </DataTemplate>
                             </BindableLayout.ItemTemplate>
                         </VerticalStackLayout>
-                        <Label x:Name="EmptyAlertsLabel" Text="Khong co san pham sap het hang." Style="{StaticResource CaptionLabel}" IsVisible="False" />
+                        <Label x:Name="EmptyAlertsLabel" Text="Không có sản phẩm sắp hết hàng." Style="{StaticResource CaptionLabel}" IsVisible="False" />
                     </VerticalStackLayout>
                 </Border>
 
                 <Border Grid.Column="1" Style="{StaticResource CardBorderStyle}">
                     <VerticalStackLayout Spacing="14">
-                        <Label Text="Hoat dong gan day" Style="{StaticResource SectionTitleLabel}" />
+                        <Label Text="Hoạt động gần đây" Style="{StaticResource SectionTitleLabel}" />
                         <VerticalStackLayout BindableLayout.ItemsSource="{Binding Activities}" Spacing="12">
                             <BindableLayout.ItemTemplate>
                                 <DataTemplate>

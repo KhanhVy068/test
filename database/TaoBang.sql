@@ -20,9 +20,12 @@ CREATE TABLE IF NOT EXISTS SanPham (
     MaSanPham INTEGER PRIMARY KEY AUTOINCREMENT,
     TenSanPham TEXT NOT NULL,
     GiaBan REAL NOT NULL,
+    GiaNhap REAL NOT NULL DEFAULT 0,
     SoLuongTon INTEGER NOT NULL CHECK (SoLuongTon >= 0),
     MucTonThap INTEGER DEFAULT 10,
-    TrangThai TEXT DEFAULT 'Hoat dong'
+    TrangThai TEXT DEFAULT 'Hoat dong',
+    HinhAnhUrl TEXT NOT NULL DEFAULT '',
+    MoTa TEXT NOT NULL DEFAULT ''
 );
 
 -- 4. Đơn Hàng Chính

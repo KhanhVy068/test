@@ -13,14 +13,14 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 
-// DI
+// Đăng ký service xử lý nghiệp vụ xác thực.
 builder.Services.AddScoped<AuthService>();
 
-// DB
+// Cấu hình SQLite làm database chính.
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlite("Data Source=../database/SyncChain.db"));
 
-// Swagger
+// Cấu hình Swagger và nút nhập Bearer token.
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
@@ -59,6 +59,7 @@ builder.Services.AddSwaggerGen(c =>
 
 var jwtSettings = builder.Configuration.GetSection("Jwt");
 
+// Cấu hình xác thực JWT cho toàn bộ API.
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -85,6 +86,7 @@ builder.Services.AddAuthentication(options =>
 
 builder.Services.AddAuthorization(options =>
 {
+    // Các policy phân quyền theo vai trò người dùng.
     options.AddPolicy("AdminOnly", policy =>
         policy.RequireRole("admin"));
 
@@ -107,6 +109,7 @@ builder.Services.AddScoped<OrderService>();
 var app = builder.Build();
 
 
+// Khởi tạo database cục bộ và bổ sung schema còn thiếu khi chạy bản cũ.
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
@@ -117,7 +120,23 @@ using (var scope = app.Services.CreateScope())
     }
     catch
     {
-        // Column already exists in an upgraded local database.
+        // Cột đã tồn tại trong database đã nâng cấp.
+    }
+    try
+    {
+        db.Database.ExecuteSqlRaw("ALTER TABLE SanPham ADD COLUMN HinhAnhUrl TEXT NOT NULL DEFAULT ''");
+    }
+    catch
+    {
+        // Cột đã tồn tại trong database đã nâng cấp.
+    }
+    try
+    {
+        db.Database.ExecuteSqlRaw("ALTER TABLE SanPham ADD COLUMN GiaNhap TEXT NOT NULL DEFAULT '0'");
+    }
+    catch
+    {
+        // Cột đã tồn tại trong database đã nâng cấp.
     }
     db.Database.ExecuteSqlRaw("""
         CREATE TABLE IF NOT EXISTS GiaoDichKho (
@@ -132,6 +151,7 @@ using (var scope = app.Services.CreateScope())
         );
         """);
 
+    // Seed lại các role mặc định để phân quyền luôn đúng.
     var roles = new[]
     {
         new PhanQuyen { MaVaiTro = 1, TenVaiTro = "customer" },
@@ -153,6 +173,7 @@ using (var scope = app.Services.CreateScope())
         }
     }
 
+    // Tạo hoặc sửa tài khoản admin mặc định.
     var admin = db.NguoiDung.FirstOrDefault(x => x.Email == "admin@gmail.com");
 
     if (admin == null)
@@ -167,7 +188,7 @@ using (var scope = app.Services.CreateScope())
     }
     else
     {
-        admin.MaVaiTro = 4; // 🔥 ép thành admin nếu đã tồn tại
+        admin.MaVaiTro = 4; 
     }
 
     db.SaveChanges();
@@ -179,6 +200,7 @@ app.UseSwagger();
 app.UseSwaggerUI();
 app.UseStaticFiles();
 
+// Bật xác thực và phân quyền trước khi map controller.
 app.UseAuthentication();
 app.UseAuthorization();
 

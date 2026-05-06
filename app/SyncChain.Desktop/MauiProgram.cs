@@ -1,9 +1,10 @@
-﻿using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging;
 
 namespace SyncChain.Desktop;
 
 public static class MauiProgram
 {
+	// Cấu hình MAUI app, font chữ và logging khi chạy debug.
 	public static MauiApp CreateMauiApp()
 	{
 		var builder = MauiApp.CreateBuilder();

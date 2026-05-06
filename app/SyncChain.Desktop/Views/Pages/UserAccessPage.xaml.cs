@@ -23,6 +23,7 @@ public partial class UserAccessPage : ContentPage
 		await LoadUsersAsync();
 	}
 
+	// Tải danh sách tài khoản nội bộ khi người dùng là admin.
 	private async Task LoadUsersAsync()
 	{
 		if (!SyncChainApiClient.Instance.CanManageUsers)
@@ -43,22 +44,24 @@ public partial class UserAccessPage : ContentPage
 		{
 			Users.Clear();
 			UpdateSummary();
-			await DisplayAlert("Nguoi dung", ex.Message, "OK");
+			await DisplayAlert("Người dùng", ex.Message, "OK");
 		}
 	}
 
+	// Cập nhật thông tin quyền và ẩn/hiện khu vực quản trị.
 	private void ApplyPermissions()
 	{
 		var currentUser = SyncChainApiClient.Instance.CurrentUser;
 		var canManage = SyncChainApiClient.Instance.CanManageUsers;
 
 		RoleHintLabel.Text = currentUser == null
-			? "Chua dang nhap."
-			: $"Dang dang nhap: {currentUser.Email} - role {currentUser.Role}. Admin co toan quyen quan ly tai khoan noi bo.";
+			? "Chưa đăng nhập."
+			: $"Đang đăng nhập: {currentUser.Email} - role {currentUser.Role}. Admin có toàn quyền quản lý tài khoản nội bộ.";
 		CreatePanel.IsVisible = canManage;
-		PermissionLabel.Text = canManage ? "Admin: tao/sua/khoa/reset" : "Chi admin duoc quan ly";
+		PermissionLabel.Text = canManage ? "Admin: tạo/sửa/khóa/reset" : "Chi admin được quản lý";
 	}
 
+	// Tính tổng số tài khoản theo role và trạng thái khóa.
 	private void UpdateSummary()
 	{
 		TotalUsersLabel.Text = Users.Count.ToString();
@@ -68,11 +71,13 @@ public partial class UserAccessPage : ContentPage
 		EmptyLabel.IsVisible = Users.Count == 0;
 	}
 
+	// Tải lại danh sách người dùng.
 	private async void OnRefreshClicked(object? sender, EventArgs e)
 	{
 		await LoadUsersAsync();
 	}
 
+	// Chọn role manager cho tài khoản sắp tạo.
 	private void OnManagerRoleClicked(object? sender, EventArgs e)
 	{
 		_selectedRole = "manager";
@@ -80,6 +85,7 @@ public partial class UserAccessPage : ContentPage
 		StaffRoleButton.Style = (Style)Application.Current!.Resources["SecondaryButtonStyle"];
 	}
 
+	// Chọn role staff cho tài khoản sắp tạo.
 	private void OnStaffRoleClicked(object? sender, EventArgs e)
 	{
 		_selectedRole = "staff";
@@ -87,6 +93,7 @@ public partial class UserAccessPage : ContentPage
 		StaffRoleButton.Style = (Style)Application.Current!.Resources["PrimaryButtonStyle"];
 	}
 
+	// Tạo tài khoản nội bộ mới theo role đã chọn.
 	private async void OnCreateUserClicked(object? sender, EventArgs e)
 	{
 		var email = EmailEntry.Text?.Trim() ?? string.Empty;
@@ -95,7 +102,7 @@ public partial class UserAccessPage : ContentPage
 
 		if (string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(password))
 		{
-			await DisplayAlert("Tai khoan", "Vui long nhap email va mat khau.", "OK");
+			await DisplayAlert("Tài khoản", "Vui lòng nhập email và mật khẩu.", "OK");
 			return;
 		}
 
@@ -108,11 +115,11 @@ public partial class UserAccessPage : ContentPage
 			UsernameEntry.Text = string.Empty;
 			PasswordEntry.Text = "123456";
 			await LoadUsersAsync();
-			await DisplayAlert("Tai khoan", "Tao tai khoan thanh cong.", "OK");
+			await DisplayAlert("Tài khoản", "Tạo tài khoản thành công.", "OK");
 		}
 		catch (Exception ex)
 		{
-			await DisplayAlert("Khong tao duoc tai khoan", ex.Message, "OK");
+			await DisplayAlert("Không tạo được tài khoản", ex.Message, "OK");
 		}
 		finally
 		{
@@ -120,13 +127,14 @@ public partial class UserAccessPage : ContentPage
 		}
 	}
 
+	// Chuyển đổi role giữa manager và staff cho tài khoản.
 	private async void OnChangeRoleClicked(object? sender, EventArgs e)
 	{
 		if ((sender as Button)?.CommandParameter is not InternalUserItem user)
 			return;
 
 		var newRole = user.Role == "manager" ? "staff" : "manager";
-		var confirmed = await DisplayAlert("Doi role", $"Chuyen {user.Email} sang {newRole}?", "Dong y", "Huy");
+		var confirmed = await DisplayAlert("Đổi role", $"Chuyển {user.Email} sang {newRole}?", "Đồng ý", "Hủy");
 		if (!confirmed)
 			return;
 
@@ -137,18 +145,19 @@ public partial class UserAccessPage : ContentPage
 		}
 		catch (Exception ex)
 		{
-			await DisplayAlert("Khong doi duoc role", ex.Message, "OK");
+			await DisplayAlert("Không đổi được role", ex.Message, "OK");
 		}
 	}
 
+	// Khóa hoặc mở khóa tài khoản nội bộ.
 	private async void OnToggleActiveClicked(object? sender, EventArgs e)
 	{
 		if ((sender as Button)?.CommandParameter is not InternalUserItem user)
 			return;
 
 		var newState = !user.IsActive;
-		var action = newState ? "mo khoa" : "khoa";
-		var confirmed = await DisplayAlert("Trang thai tai khoan", $"{action} {user.Email}?", "Dong y", "Huy");
+		var action = newState ? "mở khóa" : "khóa";
+		var confirmed = await DisplayAlert("Trạng thái tài khoản", $"{action} {user.Email}?", "Đồng ý", "Hủy");
 		if (!confirmed)
 			return;
 
@@ -159,32 +168,35 @@ public partial class UserAccessPage : ContentPage
 		}
 		catch (Exception ex)
 		{
-			await DisplayAlert("Khong cap nhat duoc tai khoan", ex.Message, "OK");
+			await DisplayAlert("Không cập nhật được tài khoản", ex.Message, "OK");
 		}
 	}
 
+	// Đặt lại mật khẩu cho tài khoản nội bộ.
 	private async void OnResetPasswordClicked(object? sender, EventArgs e)
 	{
 		if ((sender as Button)?.CommandParameter is not InternalUserItem user)
 			return;
 
-		var password = await DisplayPromptAsync("Reset mat khau", $"Mat khau moi cho {user.Email}:", "Cap nhat", "Huy", "Nhap mat khau moi", 64, Keyboard.Text, "123456");
+		var password = await DisplayPromptAsync("Reset mật khẩu", $"Mật khẩu mới cho {user.Email}:", "Cập nhật", "Hủy", "Nhập mật khẩu mới", 64, Keyboard.Text, "123456");
 		if (string.IsNullOrWhiteSpace(password))
 			return;
 
 		try
 		{
 			await SyncChainApiClient.Instance.ResetInternalUserPasswordAsync(user.Id, password.Trim());
-			await DisplayAlert("Mat khau", "Da reset mat khau.", "OK");
+			await DisplayAlert("Mật khẩu", "Đã reset mật khẩu.", "OK");
 		}
 		catch (Exception ex)
 		{
-			await DisplayAlert("Khong reset duoc mat khau", ex.Message, "OK");
+			await DisplayAlert("Không reset được mật khẩu", ex.Message, "OK");
 		}
 	}
 
+	// Đăng xuất và quay về màn hình đăng nhập.
 	private void OnLogoutClicked(object? sender, EventArgs e)
 	{
+		SyncChainApiClient.Instance.Logout();
 		App.ShowLogin();
 	}
 }

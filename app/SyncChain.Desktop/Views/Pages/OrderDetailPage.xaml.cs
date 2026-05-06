@@ -16,6 +16,7 @@ public partial class OrderDetailPage : ContentPage
 	{
 		set
 		{
+			// Nhận mã đơn hàng từ tham số điều hướng.
 			if (int.TryParse(value, out var orderId))
 			{
 				_orderId = orderId;
@@ -35,11 +36,12 @@ public partial class OrderDetailPage : ContentPage
 		await LoadOrderAsync();
 	}
 
+	// Tải thông tin đơn hàng, chi tiết dòng hàng và quyền cập nhật trạng thái.
 	private async Task LoadOrderAsync()
 	{
 		if (_orderId <= 0)
 		{
-			await DisplayAlert("Don hang", "Khong tim thay ma don hang.", "OK");
+			await DisplayAlert("Đơn hàng", "Không tìm thấy mã đơn hàng.", "OK");
 			await Shell.Current.GoToAsync("..");
 			return;
 		}
@@ -52,8 +54,8 @@ public partial class OrderDetailPage : ContentPage
 			if (order != null)
 			{
 				_status = order.Status;
-				OrderTitleLabel.Text = $"DON HANG {order.Code}";
-				OrderSubtitleLabel.Text = $"Tao luc {order.CreatedAt}";
+				OrderTitleLabel.Text = $"ĐƠN HÀNG {order.Code}";
+				OrderSubtitleLabel.Text = $"Tạo lúc {order.CreatedAt}";
 				OrderCodeLabel.Text = order.Code;
 				TotalLabel.Text = order.Total;
 				StatusLabel.Text = order.Status;
@@ -69,7 +71,7 @@ public partial class OrderDetailPage : ContentPage
 				Lines.Add(detail);
 			}
 
-			LineCountLabel.Text = $"{Lines.Count} san pham";
+			LineCountLabel.Text = $"{Lines.Count} sản phẩm";
 			EmptyLinesLabel.IsVisible = Lines.Count == 0;
 
 			var canManage = SyncChainApiClient.Instance.CanManageOrders;
@@ -78,21 +80,22 @@ public partial class OrderDetailPage : ContentPage
 		}
 		catch (Exception ex)
 		{
-			await DisplayAlert("Khong tai duoc chi tiet don", ex.Message, "OK");
+			await DisplayAlert("Không tải được chi tiết đơn", ex.Message, "OK");
 		}
 	}
 
+	// Cập nhật trạng thái đơn hàng khi người dùng chọn trạng thái mới.
 	private async void OnUpdateStatusClicked(object? sender, EventArgs e)
 	{
 		if (StatusPicker.SelectedItem is not string status)
 		{
-			await DisplayAlert("Trang thai", "Vui long chon trang thai.", "OK");
+			await DisplayAlert("Trạng thái", "Vui lòng chọn trạng thái.", "OK");
 			return;
 		}
 
 		if (status == _status)
 		{
-			await DisplayAlert("Trang thai", "Don hang dang o trang thai nay.", "OK");
+			await DisplayAlert("Trạng thái", "Đơn hàng đang ở trạng thái này.", "OK");
 			return;
 		}
 
@@ -102,12 +105,12 @@ public partial class OrderDetailPage : ContentPage
 		{
 			await SyncChainApiClient.Instance.UpdateOrderStatusAsync(_orderId, status);
 			_status = status;
-			await DisplayAlert("Trang thai", "Cap nhat trang thai thanh cong.", "OK");
+			await DisplayAlert("Trạng thái", "Cập nhật trạng thái thành công.", "OK");
 			await LoadOrderAsync();
 		}
 		catch (Exception ex)
 		{
-			await DisplayAlert("Khong cap nhat duoc trang thai", ex.Message, "OK");
+			await DisplayAlert("Không cập nhật được trạng thái", ex.Message, "OK");
 		}
 		finally
 		{
@@ -115,6 +118,7 @@ public partial class OrderDetailPage : ContentPage
 		}
 	}
 
+	// Quay lại danh sách đơn hàng.
 	private async void OnBackClicked(object? sender, EventArgs e)
 	{
 		await Shell.Current.GoToAsync("..");

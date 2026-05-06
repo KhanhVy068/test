@@ -2,6 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace SyncChain.API.Models;
 
+// Entity lưu thông tin sản phẩm và tồn kho.
 public class SanPham
 {
     [Key]
@@ -10,6 +11,8 @@ public class SanPham
     public string TenSanPham { get; set; } = string.Empty;
 
     public decimal GiaBan { get; set; }
+
+    public decimal GiaNhap { get; set; }
 
     public int SoLuongTon { get; set; }
 

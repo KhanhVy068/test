@@ -7,34 +7,34 @@
         <VerticalStackLayout Padding="30" Spacing="24">
             <Grid ColumnDefinitions="*,Auto">
                 <VerticalStackLayout>
-                    <Label Text="QUAN LY DON HANG" Style="{StaticResource PageTitleLabel}" />
-                    <Label Text="Theo doi, xem chi tiet va xu ly trang thai don hang." Style="{StaticResource CaptionLabel}" FontSize="14" />
+                    <Label Text="QUẢN LÝ ĐƠN HÀNG" Style="{StaticResource PageTitleLabel}" />
+                    <Label Text="Theo dõi, xem chi tiết và xử lý trạng thái đơn hàng." Style="{StaticResource CaptionLabel}" FontSize="14" />
                 </VerticalStackLayout>
-                <Button Grid.Column="1" Text="+ Tao don hang moi" Style="{StaticResource PrimaryButtonStyle}" Clicked="OnCreateOrderClicked" />
+                <Button Grid.Column="1" Text="+ Tạo đơn hàng mới" Style="{StaticResource PrimaryButtonStyle}" Clicked="OnCreateOrderClicked" />
             </Grid>
 
             <Grid ColumnDefinitions="*,*,*,*" ColumnSpacing="16">
                 <Border Style="{StaticResource CardBorderStyle}">
                     <VerticalStackLayout>
-                        <Label Text="TONG DON HANG" Style="{StaticResource CaptionLabel}" />
+                        <Label Text="TỔNG ĐƠN HÀNG" Style="{StaticResource CaptionLabel}" />
                         <Label x:Name="TotalOrdersLabel" Text="0" FontSize="28" FontAttributes="Bold" />
                     </VerticalStackLayout>
                 </Border>
                 <Border Grid.Column="1" Style="{StaticResource CardBorderStyle}">
                     <VerticalStackLayout>
-                        <Label Text="DON CHO" Style="{StaticResource CaptionLabel}" />
+                        <Label Text="ĐƠN CHỜ" Style="{StaticResource CaptionLabel}" />
                         <Label x:Name="PendingOrdersLabel" Text="0" FontSize="28" FontAttributes="Bold" />
                     </VerticalStackLayout>
                 </Border>
                 <Border Grid.Column="2" Style="{StaticResource CardBorderStyle}">
                     <VerticalStackLayout>
-                        <Label Text="HOAN TAT" Style="{StaticResource CaptionLabel}" />
+                        <Label Text="HOÀN TẤT" Style="{StaticResource CaptionLabel}" />
                         <Label x:Name="DoneOrdersLabel" Text="0" FontSize="28" FontAttributes="Bold" />
                     </VerticalStackLayout>
                 </Border>
                 <Border Grid.Column="3" Style="{StaticResource CardBorderStyle}">
                     <VerticalStackLayout>
-                        <Label Text="HUY DON" Style="{StaticResource CaptionLabel}" />
+                        <Label Text="HỦY ĐƠN" Style="{StaticResource CaptionLabel}" />
                         <Label x:Name="CancelOrdersLabel" Text="0" FontSize="28" FontAttributes="Bold" />
                     </VerticalStackLayout>
                 </Border>
@@ -44,10 +44,10 @@
                 <VerticalStackLayout Spacing="14">
                     <Grid ColumnDefinitions="*,Auto" ColumnSpacing="12">
                         <HorizontalStackLayout Spacing="8">
-                            <Button Text="Tat ca" Style="{StaticResource SecondaryButtonStyle}" Clicked="OnRefreshClicked" />
-                            <Button Text="Lam moi" Style="{StaticResource SecondaryButtonStyle}" Clicked="OnRefreshClicked" />
+                            <Button Text="Tất cả" Style="{StaticResource SecondaryButtonStyle}" Clicked="OnRefreshClicked" />
+                            <Button Text="Làm mới" Style="{StaticResource SecondaryButtonStyle}" Clicked="OnRefreshClicked" />
                         </HorizontalStackLayout>
-                        <Label x:Name="ScopeLabel" Grid.Column="1" Text="Dang tai..." Style="{StaticResource CaptionLabel}" VerticalTextAlignment="Center" />
+                        <Label x:Name="ScopeLabel" Grid.Column="1" Text="Đang tải..." Style="{StaticResource CaptionLabel}" VerticalTextAlignment="Center" />
                     </Grid>
 
                     <VerticalStackLayout BindableLayout.ItemsSource="{Binding Orders}" Spacing="12">
@@ -79,14 +79,14 @@
                                             </Border.StrokeShape>
                                             <Label Text="{Binding Status}" TextColor="White" />
                                         </Border>
-                                        <Button Grid.Column="5" Text="Chi tiet" Style="{StaticResource SecondaryButtonStyle}" Clicked="OnOpenDetailClicked" CommandParameter="{Binding .}" />
+                                        <Button Grid.Column="5" Text="Chi tiết" Style="{StaticResource SecondaryButtonStyle}" Clicked="OnOpenDetailClicked" CommandParameter="{Binding .}" />
                                     </Grid>
                                 </Border>
                             </DataTemplate>
                         </BindableLayout.ItemTemplate>
                     </VerticalStackLayout>
 
-                    <Label x:Name="EmptyLabel" Text="Chua co don hang nao." Style="{StaticResource CaptionLabel}" HorizontalOptions="Center" IsVisible="False" />
+                    <Label x:Name="EmptyLabel" Text="Chưa có đơn hàng nào." Style="{StaticResource CaptionLabel}" HorizontalOptions="Center" IsVisible="False" />
                 </VerticalStackLayout>
             </Border>
         </VerticalStackLayout>

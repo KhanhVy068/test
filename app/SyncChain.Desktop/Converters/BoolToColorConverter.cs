@@ -4,6 +4,7 @@ namespace SyncChain.Desktop.Converters;
 
 public sealed class BoolToColorConverter : IValueConverter
 {
+	// Đổi giá trị bool thành màu theo từng chế độ giao diện.
 	public object Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
 	{
 		var flag = value is bool isTrue && isTrue;
@@ -20,6 +21,7 @@ public sealed class BoolToColorConverter : IValueConverter
 		};
 	}
 
+	// Không hỗ trợ chuyển ngược từ màu về bool.
 	public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
 	{
 		throw new NotSupportedException();

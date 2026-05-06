@@ -19,6 +19,7 @@ public class AuthService
         _config = config;
     }
 
+    // Tạo tài khoản customer sau khi kiểm tra email và mật khẩu.
     public string Register(RegisterDTO dto)
     {
         var email = dto.Email.Trim().ToLowerInvariant();
@@ -52,6 +53,7 @@ public class AuthService
         return "Dang ky thanh cong";
     }
 
+    // Xác thực đăng nhập, kiểm tra trạng thái và sinh JWT.
     public object Login(LoginDTO dto)
     {
         if (string.IsNullOrWhiteSpace(dto.Email) || string.IsNullOrWhiteSpace(dto.Password))
@@ -74,6 +76,7 @@ public class AuthService
             throw new Exception("Tai khoan bi khoa");
         }
 
+        // Chuyển mã vai trò trong DB sang tên role dùng trong policy.
         var roleName = user.MaVaiTro switch
         {
             1 => "customer",
@@ -85,6 +88,7 @@ public class AuthService
 
         var jwtSettings = _config.GetSection("Jwt");
 
+        // Gắn user id và role vào token để các API khác phân quyền.
         var claims = new[]
         {
             new Claim("user_id", user.MaNguoiDung.ToString()),
@@ -113,9 +117,73 @@ public class AuthService
             user = new
             {
                 user.MaNguoiDung,
+                user.TenDangNhap,
                 user.Email,
                 role = roleName
             }
         };
+    }
+
+    // Trả thông tin hồ sơ theo user id trong token.
+    public object GetProfile(int userId)
+    {
+        var user = _db.NguoiDung.FirstOrDefault(x => x.MaNguoiDung == userId)
+            ?? throw new Exception("Khong tim thay tai khoan");
+
+        var roleName = user.MaVaiTro switch
+        {
+            1 => "customer",
+            2 => "staff",
+            3 => "manager",
+            4 => "admin",
+            _ => "unknown"
+        };
+
+        return new
+        {
+            user.MaNguoiDung,
+            user.TenDangNhap,
+            user.Email,
+            role = roleName,
+            user.IsActive
+        };
+    }
+
+    // Cập nhật tên hiển thị rồi trả lại hồ sơ mới.
+    public object UpdateProfile(int userId, UpdateProfileDTO dto)
+    {
+        var username = dto.Username.Trim();
+        if (string.IsNullOrWhiteSpace(username))
+            throw new Exception("Ten hien thi khong duoc de trong");
+
+        var user = _db.NguoiDung.FirstOrDefault(x => x.MaNguoiDung == userId)
+            ?? throw new Exception("Khong tim thay tai khoan");
+
+        user.TenDangNhap = username;
+        _db.SaveChanges();
+
+        return GetProfile(userId);
+    }
+
+    // Đổi mật khẩu sau khi kiểm tra mật khẩu hiện tại.
+    public void ChangePassword(int userId, ChangePasswordDTO dto)
+    {
+        var currentPassword = dto.CurrentPassword.Trim();
+        var newPassword = dto.NewPassword.Trim();
+
+        if (string.IsNullOrWhiteSpace(currentPassword) || string.IsNullOrWhiteSpace(newPassword))
+            throw new Exception("Vui long nhap du mat khau hien tai va mat khau moi");
+
+        if (newPassword.Length < 6)
+            throw new Exception("Mat khau moi phai >= 6 ky tu");
+
+        var user = _db.NguoiDung.FirstOrDefault(x => x.MaNguoiDung == userId)
+            ?? throw new Exception("Khong tim thay tai khoan");
+
+        if (!BCrypt.Net.BCrypt.Verify(currentPassword, user.MatKhauHash))
+            throw new Exception("Mat khau hien tai khong dung");
+
+        user.MatKhauHash = BCrypt.Net.BCrypt.HashPassword(newPassword);
+        _db.SaveChanges();
     }
 }

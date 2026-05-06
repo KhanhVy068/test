@@ -20,6 +20,7 @@ public class AdminController : ControllerBase
         _db = db;
     }
 
+    // Lấy danh sách tài khoản nội bộ để quản trị.
     [HttpGet("users")]
     public IActionResult GetUsers()
     {
@@ -43,6 +44,7 @@ public class AdminController : ControllerBase
         return Ok(users);
     }
 
+    // Tạo nhanh tài khoản quản lý.
     [HttpPost("create-manager")]
     public IActionResult CreateManager(RegisterDTO dto)
     {
@@ -54,6 +56,7 @@ public class AdminController : ControllerBase
         });
     }
 
+    // Tạo nhanh tài khoản nhân viên.
     [HttpPost("create-staff")]
     public IActionResult CreateStaff(RegisterDTO dto)
     {
@@ -65,6 +68,7 @@ public class AdminController : ControllerBase
         });
     }
 
+    // Tạo tài khoản nội bộ với role được chỉ định.
     [HttpPost("create-user")]
     public IActionResult CreateInternalUser(CreateInternalUserDTO dto)
     {
@@ -109,6 +113,7 @@ public class AdminController : ControllerBase
         });
     }
 
+    // Cập nhật role và trạng thái hoạt động của tài khoản nội bộ.
     [HttpPut("users/{id}")]
     public IActionResult UpdateInternalUser(int id, UpdateInternalUserDTO dto)
     {
@@ -137,6 +142,7 @@ public class AdminController : ControllerBase
         });
     }
 
+    // Khóa hoặc mở khóa tài khoản manager/staff.
     [HttpPut("users/{id}/active")]
     public IActionResult SetActive(int id, bool isActive)
     {
@@ -159,6 +165,7 @@ public class AdminController : ControllerBase
         });
     }
 
+    // Đặt lại mật khẩu cho tài khoản nội bộ.
     [HttpPut("users/{id}/password")]
     public IActionResult ResetPassword(int id, ResetPasswordDTO dto)
     {

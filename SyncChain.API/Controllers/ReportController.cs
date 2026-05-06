@@ -16,6 +16,7 @@ public class ReportController : ControllerBase
         _db = db;
     }
 
+    // Tổng hợp số liệu dashboard cho quản lý đơn và kho.
     [Authorize(Policy = "OrderManage")]
     [HttpGet("dashboard")]
     public IActionResult Dashboard()
@@ -128,7 +129,7 @@ public class ReportController : ControllerBase
         });
     }
 
-    // 🔥 STEP 2 — DOANH THU TỔNG
+    // Tính tổng doanh thu toàn hệ thống.
     [Authorize(Policy = "AdminOnly")]
     [HttpGet("revenue")]
     public IActionResult GetRevenue()
@@ -141,7 +142,63 @@ public class ReportController : ControllerBase
         });
     }
 
-    // 🔥 STEP 3 — DOANH THU THEO NGÀY
+    // Lấy nhật ký hoạt động gần đây từ đơn hàng, kho và tài khoản.
+    [Authorize(Policy = "OrderManage")]
+    [HttpGet("logs")]
+    public IActionResult GetLogs()
+    {
+        var orderLogs = _db.DonHang
+            .OrderByDescending(x => x.NgayTao)
+            .Take(40)
+            .Select(x => new
+            {
+                Title = $"Đơn hàng DH-{x.MaDonHang:0000}",
+                Description = $"Trạng thái hiện tại: {x.TrangThai}, tổng tiền {x.TongTien:N0} VND.",
+                Time = x.NgayTao,
+                Tag = "Đơn hàng",
+                Icon = "ĐH",
+                Level = x.TrangThai == "cancel" ? "danger" : x.TrangThai == "done" ? "success" : "info"
+            })
+            .ToList();
+
+        var stockLogs = _db.GiaoDichKho
+            .Include(x => x.SanPham)
+            .OrderByDescending(x => x.ThoiGian)
+            .Take(40)
+            .Select(x => new
+            {
+                Title = $"{x.Loai} SP-{x.MaSanPham:0000}",
+                Description = $"{x.SanPham.TenSanPham}: {(x.SoLuong > 0 ? "+" : string.Empty)}{x.SoLuong} sản phẩm. {x.GhiChu}",
+                Time = x.ThoiGian,
+                Tag = "Kho hàng",
+                Icon = "K",
+                Level = x.SoLuong < 0 ? "warning" : "success"
+            })
+            .ToList();
+
+        var userLogs = _db.NguoiDung
+            .OrderByDescending(x => x.MaNguoiDung)
+            .Take(20)
+            .Select(x => new
+            {
+                Title = $"Tài khoản ND-{x.MaNguoiDung:0000}",
+                Description = $"{x.Email} - {(x.IsActive ? "đang hoạt động" : "đã khóa")}.",
+                Time = DateTime.Now.AddMinutes(-x.MaNguoiDung),
+                Tag = "Người dùng",
+                Icon = "ND",
+                Level = x.IsActive ? "info" : "danger"
+            })
+            .ToList();
+
+        return Ok(orderLogs
+            .Concat(stockLogs)
+            .Concat(userLogs)
+            .OrderByDescending(x => x.Time)
+            .Take(100)
+            .ToList());
+    }
+
+    // Gom doanh thu theo từng ngày.
     [Authorize(Policy = "AdminOnly")]
     [HttpGet("revenue-by-date")]
     public IActionResult RevenueByDate()
@@ -159,7 +216,7 @@ public class ReportController : ControllerBase
         return Ok(result);
     }
 
-    // 🔥 STEP 4 — TOP PRODUCT
+    // Lấy top sản phẩm bán chạy.
     [Authorize(Policy = "AdminOnly")]
     [HttpGet("top-products")]
     public IActionResult TopProducts()
